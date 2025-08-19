@@ -1,0 +1,8 @@
+<p>a works!</p>
+<atlas-entities-panel entitiesCategory="step" entitiyType="childEntity"></atlas-entities-panel>
+<button (click)="Nav('O1')">O1</button>
+<button (click)="Nav('O2')">O2</button>
+
+<div *ngFor="let e of compService.entitiesIDS | async">{{e}}</div>
+<router-outlet></router-outlet>
+

@@ -1,0 +1,3 @@
+http://localhost:4200/(root_MTIz:650/eyJpZCI6IjEwMDAwMDAyIiwiY2F0ZWdvcnkiOiJyb290X01USXoiLCJ0eXBlIjoiNjUwIiwicGF0aCI6WyJNVEl6Il19/operation650-tabs-menu/operation650-query)
+http://localhost:4200/(root_MTIz:650/eyJpZCI6IjEwMDAwMDAyIiwiY2F0ZWdvcnkiOiJyb290X01USXoiLCJ0eXBlIjoiNjUwIiwicGF0aCI6WyJNVEl6Il19/operation650-tabs-menu/operation650-query/financial-activities)
+http://localhost:4200/(root_MTIz:650/eyJpZCI6IjEwMDAwMDAyIiwiY2F0ZWdvcnkiOiJyb290X01USXoiLCJ0eXBlIjoiNjUwIiwicGF0aCI6WyJNVEl6Il19/operation650-tabs-menu/beneficiary-details)

@@ -1,0 +1,11 @@
+<form [formGroup]="form">
+    Name:<input formControlName="name"/><br/>
+    Department:<input formControlName="dept"/><br/>
+    <button (click)="AddEmployee()">Add Employee</button>
+    Delete:<input formControlName="id"/><br/>
+    <button (click)="RemoveEmployee()">Remove Employee</button>
+
+</form>
+<div *ngFor="let ent of employees">
+    {{ent.name}} {{ent.dept}}
+</div>

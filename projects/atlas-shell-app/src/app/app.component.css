@@ -1,0 +1,12 @@
+.grid-container {
+    display: grid;
+    grid-template-areas:
+      'panel'  
+      'root-oulet';
+    gap: 10px;
+    background-color: #2196F3;
+    padding: 10px;
+  }
+
+.panel{grid-area:'panel';background-color: #66c8bd}
+.root-outlet{grid-area:'root-outlet';background-color: #b8f321;}

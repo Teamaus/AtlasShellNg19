@@ -1,0 +1,66 @@
+import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+
+import { StoreFeatureModule, StoreModule } from '@ngrx/store';
+import { ATLAS_SHELL_ENTITY_FEATURE_TOKEN, ATLAS_SHELL_ENTITY_REDUCER_TOKEN, ShellReducerAdapter, shellRedcersMapAdapter } from 'atlas-shell-logic';
+import { AtlasShellEntityService } from '../atlas-shell-entity.service';
+import { AtlasShellModalModuleModule } from '../atlas-shell-modal-module/atlas-shell-modal-module.module';
+
+
+
+const FEATURE_REDUCERS = new InjectionToken<any>("FEATURE_REDUCERS")
+function getReducers(reducers:any):any{
+  return (entityToken:string)=>{
+  if (reducers instanceof Object && typeof reducers === 'object'){
+     
+      return shellRedcersMapAdapter(entityToken,reducers)
+  }
+  
+  return ShellReducerAdapter(reducers,entityToken)
+}
+}
+function moduleFactory(featureName:string,reducers:any):any{
+    return StoreModule.forFeature(featureName,getReducers(reducers)(featureName))
+}
+@NgModule({
+  declarations: [],
+  imports: [
+    CommonModule,
+    
+    
+    
+
+  ]
+})
+export class ShellEntityModule { 
+  static feature(featureName:string,reducers:any):ModuleWithProviders<StoreFeatureModule>{
+      let retval = StoreModule.forFeature(featureName,getReducers(reducers)(featureName))
+      let providers = [{provide:ATLAS_SHELL_ENTITY_FEATURE_TOKEN,useValue:featureName},
+      AtlasShellEntityService,
+      ,{provide:ATLAS_SHELL_ENTITY_REDUCER_TOKEN,useValue:reducers}]
+      if (retval.providers)
+       retval.providers = [...retval.providers,providers]
+      
+       
+     
+      return retval
+  }
+
+  static modalFeature(modalName:string,component:any):ModuleWithProviders<AtlasShellModalModuleModule>
+  {
+    AtlasShellModalModuleModule.feature(modalName,component)
+      return {
+        ngModule:AtlasShellModalModuleModule
+      }
+  }
+  
+  
+  static root(){
+    return{
+      ngModule:ShellEntityModule,
+      providers:[{provide:ATLAS_SHELL_ENTITY_FEATURE_TOKEN,useValue:"root"},
+        AtlasShellEntityService]
+    }
+  }
+}

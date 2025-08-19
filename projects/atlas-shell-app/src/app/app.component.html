@@ -1,0 +1,21 @@
+<!--<button (click)="Nav('A','123')">A</button>
+<button (click)="Nav('B','456')">B</button>
+<button (click)="Nav('C','123')">C</button>-->
+<dir-test my-test></dir-test>
+
+<div>
+    <h1>{{title}}</h1>
+    ACTIVEID=>>>
+   {{activeID$ | async}}
+</div>
+<!--<atlas-entities-panel entitiesCategory="root" entityType="root"></atlas-entities-panel>-->
+<div class="grid-container">
+Profile:
+<atlas-entity-mediator class='panel' entitiesCategory="root"  entityType="root"></atlas-entity-mediator>
+<div class='root-outlet' [ngStyle]="{display:e.id==(activeID$|async)?'block':'none'}" *ngFor="let e of entities;let i=index;trackBy:trackByIndex">
+    
+<atlas-root-entity title="operation" [entitiesCategory]="'root_'+e.id" [name]="'root_'+e.id" [E]="e"></atlas-root-entity>
+
+</div>
+</div>
+    

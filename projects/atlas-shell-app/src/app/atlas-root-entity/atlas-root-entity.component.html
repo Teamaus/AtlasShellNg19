@@ -1,0 +1,11 @@
+<!--<atlas-entities-panel [entitiesCategory]="entitiesCategory" entityType="childRoot" [entityID]="entityID(name)"></atlas-entities-panel>-->
+{{title}}:
+<atlas-entity-mediator [entitiesCategory]="entitiesCategory" entityType="childRoot" [entityID]="entityID(name)">
+
+</atlas-entity-mediator>
+<button (click)="back()">Back</button>
+<atlas-router-outlet-adapter [name]="name">
+
+</atlas-router-outlet-adapter>
+
+

@@ -3,6 +3,20 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "atlas-shell-logic": [
+        "./dist/atlas-shell-logic"
+      ],
+      "atlas-shell-ui": [
+        "./dist/atlas-shell-ui"
+      ],
+      "atlas-shell-wf": [
+        "./dist/atlas-shell-wf"
+      ],
+      "atlas-utils": [
+        "./dist/atlas-utils"
+      ]
+    },
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,

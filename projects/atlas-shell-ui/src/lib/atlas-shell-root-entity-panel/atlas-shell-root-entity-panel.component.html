@@ -1,0 +1,20 @@
+
+<form [formGroup]="frm">
+    <input formControlName="In"/>
+    <button (click)="AddTab()">Add</button>
+</form>
+
+<button (click)="setActive(key)" *ngFor="let key of entities">{{key}}</button>
+<ng-content>
+    
+</ng-content>
+<div *ngFor="let entity of entities" [ngStyle]="visibilityStatus(entity)">
+   
+    {{entity}}
+    <atlas-router-outlet-adapter [name]="'root_'+entity" >
+    </atlas-router-outlet-adapter>
+    
+  
+   
+</div>
+

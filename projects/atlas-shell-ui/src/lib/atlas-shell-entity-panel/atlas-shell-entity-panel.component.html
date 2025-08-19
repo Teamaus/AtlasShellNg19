@@ -1,0 +1,5 @@
+<div>{{activeID$|async}}</div>
+<div>=>>>{{category}}</div>
+<div>
+    <button *ngFor="let key of keys$|async" (click)="activate(key)">{{key}}</button>
+</div>
