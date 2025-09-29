@@ -1,38 +1,39 @@
-<div *ngIf="!close">
-<button (click)="toggleClose()">toggle close</button>
-<div *ngIf="!close">
-<p>c works!</p>
-<button (click)="VALUE('CO1')">VALUE</button>
-<button (click)="NAME('CO1')">NAME</button>
-<button (click)="Nav('CO1')">NavCO1</button>
-<button (click)="Nav('B1')">NavB</button>
-<button (click)="Nav('CO2')">NavCO2</button>
-<button (click)="NavClose('CO1','B1')">Close CO1</button>
-<button (click)="NavClose('B1','CO1')">Close-B1</button>
+	<atlas-shell-enity>
+	<div *ngIf="!close">
+	<button (click)="toggleClose()">toggle close</button>
+	<p>c works!</p>
+	<button (click)="VALUE('CO1')">VALUE</button>
+	<button (click)="NAME('CO1')">NAME</button>
+	<button (click)="Nav('CO1')">NavCO1</button>
+	<button (click)="Nav('B1')">NavB</button>
+	<button (click)="Nav('CO2')">NavCO2</button>
+	<button (click)="NavClose('CO1','B1')">Close CO1</button>
+	<button (click)="NavClose('B1','CO1')">Close-B1</button>
 
 
 
 
-<button (click)="removeTopic()">Remove Topic</button>
-<button (click)="logEntity()">LogEntity</button><br/>
-<input/>
-<!--
-<wf #wf1 signature-forkflow wf-root  wf-name="abcd">
-	
-	<wf-step show #step></wf-step>
-	<wf-step show2 #step></wf-step>
-	<wf-if condition [params]="['show-result']"  #step>
-	  <wf RefName="IfTrue" #step>
-		  <wf-step get-operation-data></wf-step>
-		  <wf-step show2 #step></wf-step>
-	  </wf>
-	  <wf #else_step>
-		<wf-step show3 #step></wf-step>
-	  </wf>
-	</wf-if>
-  </wf>
-  <button (click)="RunWF()">RUN WF</button>-->
-<router-outlet>
-    
-</router-outlet>
-</div>
+	<button (click)="removeTopic()">Remove Topic</button>
+	<button (click)="logEntity()">LogEntity</button><br/>
+	<input/>
+	<!--
+	<wf #wf1 signature-forkflow wf-root  wf-name="abcd">
+		
+		<wf-step show #step></wf-step>
+		<wf-step show2 #step></wf-step>
+		<wf-if condition [params]="['show-result']"  #step>
+		<wf RefName="IfTrue" #step>
+			<wf-step get-operation-data></wf-step>
+			<wf-step show2 #step></wf-step>
+		</wf>
+		<wf #else_step>
+			<wf-step show3 #step></wf-step>
+		</wf>
+		</wf-if>
+	</wf>
+	<button (click)="RunWF()">RUN WF</button>-->
+	<router-outlet>
+		
+	</router-outlet>
+	</div>
+	</atlas-shell-enity>

@@ -11,8 +11,14 @@ import {
 import { AtlasShellEntityService } from '../atlas-shell-entity.service';
 import { AtlasShellModalModuleModule } from '../atlas-shell-modal-module/atlas-shell-modal-module.module';
 
+import { AtlasShellUIModule } from '../atlas-shell-ui.module';
+import { AtlasShellEntityDirective } from '../atlas-shell-entity.directive';
+
 @NgModule({
+  declarations:[AtlasShellEntityDirective],
   imports: [CommonModule],
+  exports:[AtlasShellEntityDirective]
+  
 })
 export class ShellEntityModule {
   /** Normalizes reducers: accepts a reducer or a reducer-map and adapts them per entity token */

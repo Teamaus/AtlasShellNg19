@@ -101,10 +101,10 @@ private injector:Injector) {
     //this.compService.closeAndNavigate([op],{relativeTo:this.activeRout})
     
     //this.shellActionService.NavigateReuse(op,this.activeRout,true)
-    //this.compService.closeRoute(op)
-    this.shellActionService.NavigationClose(op,this.activeRout)
+    this.compService.closeRoute(op)
+    //this.shellActionService.NavigationClose(op,this.activeRout)
     
-    this.shellActionService.NavigateReuse(navop,this.activeRout)
+    //this.shellActionService.NavigateReuse(navop,this.activeRout)
 
 
   }

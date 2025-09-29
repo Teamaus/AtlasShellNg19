@@ -6,7 +6,7 @@ import { CComponent } from './c/c.component';
 import { CO1Component } from './co1/co1.component';
 import { cReducer } from './c/c.reducer';
 
-import {  ShellActionService, ShellEntityModule } from 'atlas-shell-ui';
+import {  AtlasShellEntityDirective, AtlasShellUIModule, ShellActionService, ShellEntityModule } from 'atlas-shell-ui';
 import { EffectsModule } from '@ngrx/effects';
 import { EffectService } from '../effect.service';
 import { AtlasSignatureModule } from '../atlas-signature/atlas-signature.module';
@@ -38,15 +38,12 @@ import { Co2Component } from './co2/co2.component';
   ],
   imports: [
     CommonModule,
-    ShellEntityModule.feature("COP",{"cData":cReducer}),
-    
+    AtlasShellWfModule,
+    ShellEntityModule.feature("COP", { "cData": cReducer }),
     EffectsModule.forFeature([EffectService]),
     CRoutingModule,
-    AtlasShellWfModule
-    
-    
-   
-    ],  
+    ShellEntityModule
+],  
    
     providers:[ShellActionService,DocService]
 

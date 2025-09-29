@@ -124,6 +124,10 @@ export class AtlasShellEntityService implements IShellEntity {
   }
 
   navCountObj :any = {BACK:0,SET:0} 
+  closeRoute(op:string){
+    this.closeRoute_({value:[op],reuse:false,close:true})
+  }
+  
   closeRoute_(v:any){
     
     this.routeReuseStrategy.setSavedValue(v.value,false)
