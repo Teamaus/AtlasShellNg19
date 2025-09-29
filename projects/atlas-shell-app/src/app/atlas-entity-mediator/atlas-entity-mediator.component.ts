@@ -15,6 +15,7 @@ export class AtlasEntityMediatorComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log("ENTITY TYPE:",this.entityType)
   }
   AddEntity(id:string){
       console.log("ADD ENTITY ",id)

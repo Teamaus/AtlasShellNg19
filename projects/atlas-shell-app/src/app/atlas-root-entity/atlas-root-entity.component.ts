@@ -19,7 +19,7 @@ export class AtlasRootEntityComponent implements OnInit {
     return name.split("_")[1]
   }
   constructor(private location:Location) { 
-     console.log("###ROOT ENTITY")
+     console.log("###ROOT ENTITY",this)
   }
   ngDoCheck(){
     console.log("DO CHECK =>>>>>",this.name)
