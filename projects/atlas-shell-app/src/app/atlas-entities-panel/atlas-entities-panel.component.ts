@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AtlasShellEntityService } from 'atlas-shell-ui';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { ATLAS_SHELL_ENTITY, AtlasShellEntityService, IAtlasShellEntity } from 'atlas-shell-ui';
 
 
 import { Observable } from 'rxjs';
+import { AtlasShellRootDirective } from '../atlas-shell-root.directive';
 
 
 @Component({
@@ -18,8 +19,8 @@ export class AtlasEntitiesPanelComponent implements OnInit {
   @Input() entityID = ""
   ids$?:Observable<any>
   entities$?:Observable<any>
- 
-  constructor(private componentService:AtlasShellEntityService) { 
+  
+  constructor(private componentService:AtlasShellEntityService,private atlasRoot:AtlasShellRootDirective) { 
         
         
   }
@@ -40,6 +41,8 @@ export class AtlasEntitiesPanelComponent implements OnInit {
       console.log("Entity Type:",this.entityType)
       switch(this.entityType){
         case 'root':
+            console.log("Creating USER ...",type)
+            this.atlasRoot.setActiveType(type)
             this.componentService.createRootEntity(type)
             break
         case 'childRoot':

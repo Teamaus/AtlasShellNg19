@@ -367,7 +367,7 @@ export class AtlasShellEntityService implements IShellEntity {
       .pipe(take(1))
       .subscribe(
         (state:any)=>{
-          console.log("createOrActivateChildRootEntity",state)
+          console.log("createOrActivateChildRootEntity-state",state)
           let entityID = state.activeID[Object.keys(state.activeID)[0]]
           let entity = state.entities[entityID]
           if (entity){

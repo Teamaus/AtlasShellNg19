@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {Location  } from '@angular/common'
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterEvent } from '@angular/router';
 import { Store, createFeatureSelector, createSelector, props } from '@ngrx/store';
@@ -8,8 +8,9 @@ import { filter, map, take } from 'rxjs/operators';
 
 import { Observable } from 'rxjs';
 import { RootComponentService } from './root-component.service';
-import { AtlasShellEntityService } from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasShellEntityService } from 'atlas-shell-ui';
 import { LazyLoadInitService } from './lazy-load-init.service';
+import { AtlasShellRootDirective } from './atlas-shell-root.directive';
 
 
 
@@ -26,7 +27,7 @@ export class AppComponent {
   entities$?:Observable<any>
   activeID$?:Observable<any>
   root$?:Observable<any>
-  
+  @ViewChild(ATLAS_SHELL_ENTITY) shell_root!:AtlasShellRootDirective
   constructor(private store:Store<any>,
     private entityService:AtlasShellEntityService,
     private rootService:RootComponentService,private router:Router,private shellServiceBus:AtlasShellServiceBusService
@@ -60,11 +61,18 @@ export class AppComponent {
 
     
     this.entities$ = this.rootService.rootEntities$().pipe(map(entities=>entities.map((ent:any)=>{return {...ent,visibility:"hidden"}})))
-    this.entities$.subscribe(entities=>this.buildEntities(entities))
+    this.entities$.subscribe(entities=>
+      {
+          console.log("BUILD ENTITIES",entities)
+          this.buildEntities(entities)
+      })
     this.activeID$=this.rootService.activeRootEntity$()
     
     
-    this.activeID$.pipe(map(entity=>atob(entity))).subscribe(entity=>console.log("ACTIVE ENTITY$$===>>",entity))
+    this.activeID$.pipe(map(entity=>atob(entity))).subscribe(entity=>{
+                                                                        console.log("ACTIVE ENTITY$$===>>",entity)
+                                                                        this.shell_root.setActiveType(entity)
+                                                                      })
     this.root$ = this.rootService.root$().pipe(map(root=>JSON.stringify(root)))
   }
   buildEntities(entities:any[]){
