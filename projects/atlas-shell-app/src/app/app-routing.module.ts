@@ -15,7 +15,7 @@ const routes: Routes = [
     {path:"O2",component:O2Component}
 
   ]},
-  {path:"B/:entity",component:BComponent,outlet:"root_456",children:[
+  {path:"B/:entity",component:BComponent,outlet:"root_XXXX",children:[
     {path:"O3",component:O3Component,outlet:"info"},
     {path:"O3/:entity",component:O3Component,outlet:"info"}
     

@@ -22,7 +22,9 @@ export class AtlasShellEntityFactoryService {
       return ++this.instanceID
   }
 
-  constructor(@Inject(ATLAS_SHELL_TOKEN)private  shellToken:string,private shellSelector:AtlasShellSelectorService) { }
+  constructor(@Inject(ATLAS_SHELL_TOKEN)private  shellToken:string,private shellSelector:AtlasShellSelectorService) {
+    console.log("ATLAS_SHELL_TOKEN",shellToken)
+   }
   createEntity(type:string,category:string):AtlasShellEntity{
       let retval = {id:this.getInstanceID().toString(),category:category,type:type,path:[]}
       

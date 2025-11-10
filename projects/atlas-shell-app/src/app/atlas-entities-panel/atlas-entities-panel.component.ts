@@ -1,9 +1,11 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { ATLAS_SHELL_ENTITY, AtlasShellEntityService, IAtlasShellEntity } from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasShellEntityService, AtlasShellNavigationV19Service, IAtlasShellEntity } from 'atlas-shell-ui';
 
 
 import { Observable } from 'rxjs';
 import { AtlasShellRootDirective } from '../atlas-shell-root.directive';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 
 @Component({
@@ -20,7 +22,11 @@ export class AtlasEntitiesPanelComponent implements OnInit {
   ids$?:Observable<any>
   entities$?:Observable<any>
   
-  constructor(private componentService:AtlasShellEntityService,private atlasRoot:AtlasShellRootDirective) { 
+  constructor(private componentService:AtlasShellEntityService,private router:Router,
+    private activatedRoute:ActivatedRoute,
+    private shellNavigationService:AtlasShellNavigationV19Service
+    
+  ) { 
         
         
   }
@@ -38,16 +44,29 @@ export class AtlasEntitiesPanelComponent implements OnInit {
     this.entities$=this.componentService.childEntities$
   }
   createOrActivate(type:string){
-      console.log("Entity Type:",this.entityType)
+      console.log("Entity Type:",this.entityType,this.entityID)
       switch(this.entityType){
         case 'root':
             console.log("Creating USER ...",type)
-            this.atlasRoot.setActiveType(type)
+            
             this.componentService.createRootEntity(type)
             break
         case 'childRoot':
-          
-          this.componentService.createOrActivateChildRootEntity(type)
+          if (false)
+          {
+              
+              console.log("NAV TO B:config",this.router.config)
+              console.log("NAV TO B:",{outlets:{[this.entityID]:[type]}})
+              
+             // this.router.navigate([{outlets:{["root_"+this.entityID]:[type]}}])
+           //  this.shellNavigationService.navigate([{outlets:{["root_"+this.entityID]:[type]}}],true,type,{relativeTo:this.activatedRoute})
+              this.shellNavigationService.NavEntity(this.entityID,type,this.activatedRoute)
+          }
+          else
+          {
+              console.log("NAV TO C:config",this.router.config)
+              this.componentService.createOrActivateChildRootEntity(type)
+          }
           break
         case 'childEntity':
           this.componentService.createOrActivateChildAntity(type,this.entitiesCategory)

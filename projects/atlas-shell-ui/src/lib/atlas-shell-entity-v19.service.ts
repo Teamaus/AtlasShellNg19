@@ -1,3 +1,12 @@
+/*import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AtlasShellEntityV19Service {
+
+  constructor() { }
+}*/
 import { Component, Inject, Injectable, Injector, Optional } from '@angular/core';
 import { ActivatedRoute, EventType, NavigationEnd, RouteReuseStrategy, Router } from '@angular/router';
 import { Action, Store, createSelector } from '@ngrx/store';
@@ -43,7 +52,7 @@ function getCounter(){
   return retval
 }
 @Injectable()
-export class AtlasShellEntityService implements IShellEntity {
+export class AtlasShellEntityV19Service implements IShellEntity {
   component?:any
   get add_e(){ return  TREE_ADDENTITY(this.shellToken)}
   get activate_e(){return  TREE_SETACTIVE(this.shellToken)}
@@ -149,7 +158,8 @@ export class AtlasShellEntityService implements IShellEntity {
     
     if (this.routeReuseStrategy)
     {
-      let pathState = ((this.routeReuseStrategy) as any).pathState     
+      let pathState = ((this.routeReuseStrategy) as any).pathState
+      
       this.routeReuseStrategy.setSavedValue(value,save)    
       routedValue = pathState.get(this.routeReuseStrategy.getKey(value))?pathState.get(this.routeReuseStrategy.getKey(value)):value
       if (this.routeReuseStrategy.navMode=="URL")
@@ -259,7 +269,7 @@ export class AtlasShellEntityService implements IShellEntity {
       
       if (this.routeReuseStrategy)
         this.routeReuseStrategy.setEntityType(entity.type)
-     console.log("entityIDSelectorSubscribe",entity,param)
+     console.log("V19 entityIDSelectorSubscribe",entity,param)
      this.navigateSave([{outlets:{[entity.category]:[entity.type,param]}}], {relativeTo:this.activatedRoute})
     }
   }
@@ -433,3 +443,4 @@ export class AtlasShellEntityService implements IShellEntity {
 
 
 }
+

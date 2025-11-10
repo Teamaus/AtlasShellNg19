@@ -129,7 +129,7 @@ private injector:Injector) {
     this.compService.dispatch(SETNAME({name:n}))
   }
   ngOnDestroy()	{
-    console.log("CComponent DESTROYING ",this.compService.entity.id,this.compCounter,this.compService.entity.category)
+    console.log("CComponent DESTROYING ",this.compCounter)
     
   }
   removeTopic(){

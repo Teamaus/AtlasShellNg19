@@ -11,7 +11,8 @@ import { AComponent } from './a/a.component';
 import { O1Component } from './o1/o1.component';
 import { O2Component } from './o2/o2.component';
 import { O3Component } from './o3/o3.component';
-import { AtlasShellReuseStrategy, AtlasRouterOutletAdapterDirective, AtlasShellUIModule, ShellEntityModule, ATLAS_ENTITIES_USE_REUSESTRATEGY, AtlasCreateReuseStrategy } from 'atlas-shell-ui';
+import { AtlasShellUIModule, ShellEntityModule, ATLAS_ENTITIES_USE_REUSESTRATEGY, AtlasCreateReuseStrategy, 
+ } from 'atlas-shell-ui';
 import { AtlasEntitiesPanelComponent } from './atlas-entities-panel/atlas-entities-panel.component';
 import { AtlasRootEntityComponent } from './atlas-root-entity/atlas-root-entity.component';
 import { AtlasAddEntityComponent } from './atlas-add-entity/atlas-add-entity.component';
@@ -51,7 +52,8 @@ type slices = "shell" | "doc"
     MyTestDirective,
     DirTestComponent,
     AtlasShellRootDirective,
-  
+    
+    
     
     
     
@@ -70,7 +72,10 @@ type slices = "shell" | "doc"
     ReactiveFormsModule,
     AtlasShellUIModule.forRoot<slices>("shell","doc"),
     EffectsModule.forRoot(),
-    ShellEntityModule.root()
+    
+    ShellEntityModule.root(),
+    ShellEntityModule
+    
     
    // AtlasShellWfModule
     

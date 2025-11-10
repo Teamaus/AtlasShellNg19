@@ -20,7 +20,7 @@ export class CShellComponent implements AfterViewInit {
     
   }
   ngOnDestroy(){
-    console.log("CSHELL DESTROY ",this.compService.entity.id)
+    console.log("CSHELL DESTROY ",this.compService)
   }
 
 }

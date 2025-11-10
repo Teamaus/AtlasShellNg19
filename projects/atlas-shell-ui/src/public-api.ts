@@ -25,6 +25,9 @@ export * from './lib/atlas-reuse-strategy'
 export * from './lib/wf-registry.service'
 export * from './lib/router-outlet-adapter/router-outlet-adapter.component'
 export * from './lib/atlas-shell-entity.directive'
+export * from './lib/atlas-shell-navigation-v19.service'
+export * from './lib/atlas-child-entities-v19.service'
+
 
 	
 

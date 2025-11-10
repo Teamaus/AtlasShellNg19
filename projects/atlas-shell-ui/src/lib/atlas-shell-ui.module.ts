@@ -76,7 +76,7 @@ function rootReducers<T extends string>(slices:Array<T>){
     AtlasShellAddEntityV2Component,
     AtlasShellEntityMediatorComponent,
     RouterOutletAdapterComponent,
-    AtlasShellEntityDirective
+    
 
 
   ],

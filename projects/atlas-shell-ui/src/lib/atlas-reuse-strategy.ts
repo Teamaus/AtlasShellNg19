@@ -33,7 +33,7 @@ export class AtlasShellReuseStrategy implements RouteReuseStrategy{
 			let comp = handler?(handler as any).componentRef:handler
 			//if (comp) comp.Destroy()
 			console.log("COMPREF YUP:",comp)
-			if (comp) comp.destroy()
+			//if (comp) comp.destroy()
 			this.routeStore.delete(key)
 			console.log("CLOSE routestore:",this.routeStore)
 			childKeys.forEach(childKey=>
@@ -76,7 +76,7 @@ export class AtlasShellReuseStrategy implements RouteReuseStrategy{
 	{
 	}
 	isReuseStrategyEntity(operation:string){
-		console.info("IS REUSE STRATEGY:",operation)
+		console.info("IS REUSE STRATEGY:",operation,this.entitiesUsingStrategy)
 		let retval = false
 		if (this.entitiesUsingStrategy)
 			retval =  this.entitiesUsingStrategy.includes(operation)||this.entitiesUsingStrategy.includes(ATLAS_ALL_ENTITIES)
@@ -144,7 +144,7 @@ export class AtlasShellReuseStrategy implements RouteReuseStrategy{
 		let retval = this.isReuseStrategyEntity(this.getEntityOperation("SHOULD_DETACH"))
 		
 		retval = retval && this.getSave(route) 
-		//console.warn("SHOULD DETACH:",this.setKey(route.routeConfig?.path?route.routeConfig?.path:"",route.outlet),retval,this.getSave(route))
+		console.warn("SHOULD DETACH:",retval,this.getSave(route) ,route.routeConfig?.path,route.component)
 		return retval
 	}
 	private routeStore = new Map<string, DetachedRouteHandle>();
@@ -157,10 +157,11 @@ export class AtlasShellReuseStrategy implements RouteReuseStrategy{
 		if (route.routeConfig)
 			if (route.routeConfig.path)
 			{	
-				console.warn("REUSE:STORE...2")
+				console.warn("REUSE:STORE...2",route.routeConfig.path,route.outlet,handle)
 				this.routeStore.set(this.setKey(route.routeConfig.path,route.outlet), handle)
 				this.pathState.set(this.setKey(route.routeConfig.path,route.outlet),route)
 				let instance = (handle as any).componentRef.instance
+				
 				if (instance["sleep"]){
 					instance.sleep() 
 
@@ -174,14 +175,18 @@ export class AtlasShellReuseStrategy implements RouteReuseStrategy{
 
 		const path = route!.routeConfig!.path;
 		let retval = false
+		
 		let reuse = this.entityTypes.length>0?this.isReuseStrategyEntity(this.getEntityOperation("SHOULD_ATTACH")):true
+		
 		if (path && reuse)
 		{
+			
 			retval = this.routeStore.get(this.setKey(path,route.outlet)) != undefined
+			
 			const key = this.setKey(path,route.outlet)
 			this.pathState.set(key,route)
 		}
-		console.warn("SHOULD ATTACH",retval,this.getSave(route))
+		console.warn("SHOULD ATTACH",retval,this.getSave(route),path,route.component)
 		return retval && this.getSave(route) 
 		
 	}
