@@ -13,6 +13,7 @@ export class AtlasNavigationEndService {
         event=>{
           let param = ""
           console.log("Yup we are here 1")
+          
           let s = this.router.routerState.snapshot.root;
              while (s.firstChild) s = s.firstChild;
              

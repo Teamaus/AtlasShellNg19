@@ -21,7 +21,7 @@ export class CO1Component implements OnInit,OnDestroy {
   }
 
   ngOnInit(): void {
-      console.log("ENTITY CO1:",this.shellEntityService.entity.id)
+      //console.log("ENTITY CO1:",this.shellEntityService.entity.id)
   }
   GeneralDispatch()
   {

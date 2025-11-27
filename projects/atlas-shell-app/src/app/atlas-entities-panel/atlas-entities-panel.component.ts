@@ -52,11 +52,11 @@ export class AtlasEntitiesPanelComponent implements OnInit {
             this.componentService.createRootEntity(type)
             break
         case 'childRoot':
-          if (false)
+          if (type=="C" || type=="B")
           {
               
-              console.log("NAV TO B:config",this.router.config)
-              console.log("NAV TO B:",{outlets:{[this.entityID]:[type]}})
+              console.log("NAV TO ",type,":config",this.router.config)
+              console.log("NAV TO ",type,":",{outlets:{[this.entityID]:[type]}})
               
              // this.router.navigate([{outlets:{["root_"+this.entityID]:[type]}}])
            //  this.shellNavigationService.navigate([{outlets:{["root_"+this.entityID]:[type]}}],true,type,{relativeTo:this.activatedRoute})

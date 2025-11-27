@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Inject, Injectable, Injector, OnInit, Type } from '@angular/core';
 import { SETNAME, SETUPACTION, SETVALUE } from './c.reducer';
 import { Store, createAction, createFeatureSelector, createSelector } from '@ngrx/store';
-import { AtlasProvideRegistryService, AtlasShellEntityService, AtlasShellModalModuleModule, AtlasShellSelect, ShellActionService, WfRegistryService } from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasShellEntityDirective,AtlasProvideRegistryService, AtlasShellEntityService, AtlasShellModalModuleModule, AtlasShellSelect, ShellActionService, WfRegistryService, AtlasShellNavigationV19Service } from 'atlas-shell-ui';
 import { nestedSelector } from 'atlas-utils';
 import { EFFECT_ACTION } from '../c.actions';
 import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
@@ -45,7 +45,9 @@ export class CComponent implements AfterViewInit {
   static count = 0 
   close = false
   compCounter = 0 
-  constructor(private compService:AtlasShellEntityService,private store:Store<any>,
+  constructor(
+    private navigation19Service:AtlasShellNavigationV19Service,
+    private compService:AtlasShellEntityService,private store:Store<any>,
     private activeRout:ActivatedRoute,
     private router:Router,
     private serviceBus:AtlasShellServiceBusService,
@@ -53,6 +55,7 @@ export class CComponent implements AfterViewInit {
   private wfRegistry:WfRegistryService,
   private shellActionService:ShellActionService,
 private injector:Injector) { 
+  console.log("CComponent CONSTRUCTOR")
    this.compCounter = ++CComponent.count
    console.log("COP CTOR",this.compCounter)   
    this.store.dispatch(A3())
@@ -111,7 +114,8 @@ private injector:Injector) {
 
   Nav(op:string){
     
-    this.compService.navigateSave([op],{relativeTo:this.activeRout})
+    this.navigation19Service.navigate([op],true,"C",{relativeTo:this.activeRout})
+   // this.compService.navigateSave([op],{relativeTo:this.activeRout})
    console.log("SASID:",op,this.activeRout,"===>>",this.shellActionService.currentAction,this.shellActionService.sasid)
 
    //this.shellActionService.NavigateReuse(op,this.activeRout)

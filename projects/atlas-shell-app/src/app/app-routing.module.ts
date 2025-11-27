@@ -15,12 +15,12 @@ const routes: Routes = [
     {path:"O2",component:O2Component}
 
   ]},
-  {path:"B/:entity",component:BComponent,outlet:"root_XXXX",children:[
+  {path:"B",component:BComponent,outlet:"root_XXXX",children:[
     {path:"O3",component:O3Component,outlet:"info"},
     {path:"O3/:entity",component:O3Component,outlet:"info"}
     
   ]},
-  {path:"C/:entity",loadChildren:()=>import('../app/c/c.module').then(m=>m.CModule),outlet:"root_XXXX"},
+  {path:"C",loadChildren:()=>import('../app/c/c.module').then(m=>m.CModule),outlet:"root_XXXX"},
   {path:"D/:entity",loadChildren:()=>import('../app/d/d.module').then(m=>m.DModule),outlet:"root_XXX"},
  
 

@@ -4,6 +4,9 @@ import { AtlasShellEntityFactoryService, AtlasShellFactoryService, AtlasShellSel
 import { AtlasShellEntityService } from './atlas-shell-entity.service';
 import { AtlasShellEntityV19Service } from './atlas-shell-entity-v19.service';
 import { AtlasChildEntitiesV19Service } from './atlas-child-entities-v19.service';
+import { ActivatedRoute, NavigationEnd, Route, Router, RouteReuseStrategy } from '@angular/router';
+import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
+import { filter, take, tap } from 'rxjs';
 
 
 export const ATLAS_SHELL_ENTITY = new InjectionToken<any>("ATLAS_SHELL_ENTITY")
@@ -22,17 +25,28 @@ export interface IAtlasShellEntity
 export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
   entityType = input<string>("")
   entityCategoty=input<string>("childRoot")
-  
+  counter = 0
   entity:any 
-  
+  /*
+  ToDo: Change reuse strategy so the save will be during the navigation end on the directive 
+  The key will be the url itself . But what we will save we need to store the handler 
+  */
   constructor(private shellFactory:AtlasShellEntityFactoryService,
               private store:Store, 
               private shellSelector:AtlasShellSelectorService,
               private shellEntityService:AtlasShellEntityV19Service, 
               private childrenEntitiesService:AtlasChildEntitiesV19Service,
+              private router:Router,
+              private activatedRoute:ActivatedRoute,
+              private reuseStrategy:RouteReuseStrategy,
              @SkipSelf() @Optional() @Inject(ATLAS_SHELL_ENTITY) private parentEntity:AtlasShellEntityDirective ) { 
     
     effect(()=>this.createtOrActivate(this.entityType()))
+      console.log("DIRECTIVE CONSTRUCTOR PARENT:",this.parentEntity)
+     
+   
+      
+    
   }
   get childEntities(): any[] {
       return this.childrenEntitiesService.childEntities    
@@ -47,6 +61,15 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
   }
   ngOnInit(): void {
       this.shellFactory.getInstanceID()
+       console.log("DIRECTIVE: atlas-shell-entity",this.entityType(),this.entityCategoty(),++this.counter)
+        this.router.events.pipe(tap(event=>console.log("EVENT>>>",event)),filter(event=>event instanceof NavigationEnd)).subscribe(event=> {
+      
+      const reuseStrategy = this.reuseStrategy as AtlasShellReuseStrategy
+      
+      console.log("ROUTER EVENT IN DIRECTIVE:",this.router.routerState.snapshot,event)
+      
+    }
+  )
   }
   createtOrActivate(type:string){
       let ret = "Create"
@@ -63,17 +86,18 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
           ret="Activate"
            
           this.shellEntityService.entity = this.entity
-          console.log("V19 ACTIVATE: ", this.shellEntityService)
+          console.log("V19 ACTIVATE:>>> ", this.shellEntityService)
           this.shellEntityService.setActive()
         }  
         else
         {
           //Here we are going to create 
-          
-          this.entity = this.shellEntityService.createEntity_2(this.getPath(),type,this.entityCategoty())
+          const path = this.getPath()
+          this.entity = this.shellEntityService.createEntity_2(path,type,this.entityCategoty())
           this.shellEntityService.entity = this.entity 
-         
+          console.log
           this.parentEntity.addChildEntity(this.entity)
+          console.log("V19 CREATE: ", path)
         }
         
       

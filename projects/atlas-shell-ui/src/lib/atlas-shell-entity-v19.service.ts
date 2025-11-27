@@ -351,6 +351,7 @@ export class AtlasShellEntityV19Service implements IShellEntity {
         console.log("createOrActivateChildRootEntity 3...",ent)  
       let actions = createCompositeAction("ADD_AND_ACTIVATE",this.add_e({path:path,entity:ent}),this.activate_e({id:ent.id,path:[]}))
       this.registryService.registerInstance(ent.id,this)
+      console.log("ACTION:",actions)
       this.store.dispatch(actions)
       return ent
   }

@@ -1,6 +1,7 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { ActivatedRoute, Router, RouteReuseStrategy } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouteReuseStrategy } from '@angular/router';
 import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
+import { filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,19 @@ import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
 export class AtlasShellNavigationV19Service {
 
   constructor(private router:Router,@Optional() @Inject(RouteReuseStrategy) private routeReuseStrategy:AtlasShellReuseStrategy) { 
-
+     this.router.events.pipe(filter(event=>event instanceof NavigationEnd))
+      .subscribe(
+        event=>{
+          this.routeReuseStrategy.navMode = "URL"   
+          const rootSnapshot = this.router.routerState.root.snapshot;
+          console.log("AtlasShellNavigationV19Service 1:",event,rootSnapshot)
+          //const path = this.routeReuseStrategy.getPath(rootSnapshot)
+          //this.routeReuseStrategy.setSavedValue([path],true)
+          //console.log("NAVIGATION END EVENT:",event)
+          console.log("AtlasShellNavigationV19Service 2",(this.routeReuseStrategy as any).pathState)
+        }
+      )
+     
   }
   NavEntity(entityID:string,entityType:string,activatedRoute:ActivatedRoute){
       
@@ -32,6 +45,7 @@ export class AtlasShellNavigationV19Service {
       
       let pathState = ((this.routeReuseStrategy) as any).pathState
       
+      console.log("SETSAVEDVALUE PATHSTATE:",value,pathState)
       this.routeReuseStrategy.setSavedValue(value,save)    
       routedValue = pathState.get(this.routeReuseStrategy.getKey(value))?pathState.get(this.routeReuseStrategy.getKey(value)):value
       if (this.routeReuseStrategy.navMode=="URL")
@@ -48,7 +62,7 @@ export class AtlasShellNavigationV19Service {
     console.log("ASE>>>",routedValue,value)
     if (routedValue==value)
     {
-        console.log("entityIDSelectorSubscribe",routedValue==value)
+        console.log("entityIDSelectorSubscribe 3",routedValue==value)
         this.router.navigate(routedValue,extras)
     }
     else

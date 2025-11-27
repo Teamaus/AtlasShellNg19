@@ -23,6 +23,7 @@ export class AtlasShellRootDirective implements IAtlasShellEntity,OnInit {
 
    }
   searchChildEntity(type: string) {
+    this.childrenEntitiesService.childEntities = this._childrenType[this.activeType]
     return this.childrenEntitiesService.searchEntity(type)
   }
   ngOnInit(): void {
@@ -39,6 +40,7 @@ export class AtlasShellRootDirective implements IAtlasShellEntity,OnInit {
     
   }
   addChildEntity(entity:any){
+    this.childrenEntitiesService.childEntities = this._childrenType[this.activeType]
     this.childrenEntitiesService.addEntity(entity)
   }
   

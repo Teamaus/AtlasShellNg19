@@ -11,8 +11,14 @@ import { Co2Component } from './co2/co2.component';
 
 
 const routes: Routes = [
-  {path:'',component:CShellComponent,children:[{path:'',component:CComponent,
-    children:[{path:'CO1',component:CO1Component,children:[{path:'CO12',component:Co12Component},{path:'CO13',component:Co13Component}]},
+  
+  {path:'',component:CShellComponent,children:[
+    
+    {path:'',component:CComponent,
+    children:[{path:'',component:CO1Component,children:[{path:'CO12',component:Co12Component},{path:'CO13',component:Co13Component}]},
+    {path:'CO1',component:CO1Component,children:[{path:'CO12',component:Co12Component},{path:'CO13',component:Co13Component}]},
+    
+    
   {path:"B1",component:BComponent},
   {path:"CO2",component:Co2Component}]},
  

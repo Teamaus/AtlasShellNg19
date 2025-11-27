@@ -30,7 +30,7 @@ export class ShowDirective implements  IWfCustomRunner{
       this.shellEntityService.shellEntitySelect(this.selectorB,"cData")
       .pipe(take(1))
       .subscribe(
-        v=>{
+        (v:any)=>{
           let retval  = confirm("OH...?"+v);
           (this.parent as IWfStep).getResult$().subscribe(res=>console.log("SHO->>RESULT>>>:",res));
           (this.parent as IWfStep).setResult({confirm:retval})
