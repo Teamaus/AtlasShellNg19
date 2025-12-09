@@ -18,10 +18,13 @@ export class AtlasShellReuseStrategy implements RouteReuseStrategy{
 	entityType:string =""
 	entityTypes:string[] = []
 	savedRoutes :{[key:string]:any} = {}
+	savedRoutes_2:{[key:string]:any}={}
 	activatedRoute$ = new Subject<ActivatedRoute|undefined>()
 	saveRoute(value:any,snapshot:ActivatedRouteSnapshot){
 		this.pathState.set(value,snapshot)
 		this.savedRoutes[value] = true
+		console.log("SNAPSHOTURL:",value)
+		this.savedRoutes_2[value]=true
 
 	}
 	closeRoute(value:any){
@@ -32,7 +35,7 @@ export class AtlasShellReuseStrategy implements RouteReuseStrategy{
 	setSavedValue(value:any,save:boolean){
 		
 		const key = this.getKey(value)
-
+		
 		this.savedRoutes[key] = save
 		
 		console.log("SETSAVEDVALUE:",value,save,key,this.savedRoutes )
@@ -186,7 +189,8 @@ export class AtlasShellReuseStrategy implements RouteReuseStrategy{
 	shouldDetach(route: ActivatedRouteSnapshot): boolean {
 		
 		let retval = this.isReuseStrategyEntity(this.getEntityOperation("SHOULD_DETACH"))
-		console.warn("SHOULD DETACH:>>",retval,this.getSave(route) ,route.routeConfig,route.routeConfig?.path,route.component,"PATH:",this.getPath(route))
+		console.warn("SHOULD DETACH:>>",this.savedRoutes_2,route.url.join(","))
+
 		retval = retval && this.getSave(route) 
 		
 		return retval
@@ -304,9 +308,27 @@ export class PathState implements IPathState{
 		}
 		return retval  
 	}
+
+	getURLfromSnapshotWithOutlet(route: ActivatedRouteSnapshot): string {
+  		const chain = route.pathFromRoot;
+
+  		const path = chain
+    		.map(r => r.url.map(s => s.path).join('/'))
+    		.filter(p => p.length > 0)
+    		.join('/');
+
+  		const outletSnap = chain.find(r => r.outlet && r.outlet !== 'primary');
+  		if (!outletSnap) {
+    		return '/' + path;
+  		}
+
+  		return `/(${outletSnap.outlet}:${path})`;
+	}
+
 	getRouteUrl(route:ActivatedRouteSnapshot | undefined | null){
 		//Will change this 
-		return (route as any)._routerState.url 
+		//return (route as any)._routerState.url 
+		return this.getURLfromSnapshotWithOutlet(route as ActivatedRouteSnapshot)
 	}
 	set(key: string, route: ActivatedRouteSnapshot): void {
 		this.pathState.set(key,route)

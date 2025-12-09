@@ -1,7 +1,8 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouteReuseStrategy } from '@angular/router';
 import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
-import { filter } from 'rxjs';
+import { filter, take } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,10 @@ export class AtlasShellNavigationV19Service {
      this.router.events.pipe(filter(event=>event instanceof NavigationEnd))
       .subscribe(
         event=>{
-          this.routeReuseStrategy.navMode = "URL"   
+          this.routeReuseStrategy.navMode = "URL"  
+           
           const rootSnapshot = this.router.routerState.root.snapshot;
-          console.log("AtlasShellNavigationV19Service 1:",event,rootSnapshot)
+          console.log("AtlasShellNavigationV19Service 1:",event,rootSnapshot,event.url)
           //const path = this.routeReuseStrategy.getPath(rootSnapshot)
           //this.routeReuseStrategy.setSavedValue([path],true)
           //console.log("NAVIGATION END EVENT:",event)
@@ -35,8 +37,28 @@ export class AtlasShellNavigationV19Service {
       this.navigate([{outlets:{["root_"+entityID]:[entityType]}}],true,entityType,{relativeTo:activatedRoute})
   }
     
+  targetUrl(router:Router,activatedRoute:ActivatedRoute,value:any)
+  {
+    const tree   = this.router.createUrlTree(value, { relativeTo: activatedRoute });
+    const newUrl = this.router.serializeUrl(tree);
+
+    return newUrl
+
+  }
+  setSaveRoute(save:boolean){
+    this.router.events.pipe(filter(event=>event instanceof NavigationEnd),take(1))
+      .subscribe(
+        event=>{
+          this.routeReuseStrategy.navMode = "URL"  
+          //this.routeReuseStrategy.saveRoute(event.url,save) 
+          
+        }
+      )
+     
+  }
   navigate(value:any,save:boolean,entityType:string,extras?:any|undefined){
     let routedValue = value
+    this.setSaveRoute(save) 
     console.log("entityIDSelectorSubscribe",value,save,extras)
     
     
@@ -46,7 +68,10 @@ export class AtlasShellNavigationV19Service {
       let pathState = ((this.routeReuseStrategy) as any).pathState
       
       console.log("SETSAVEDVALUE PATHSTATE:",value,pathState)
-      this.routeReuseStrategy.setSavedValue(value,save)    
+      
+      this.routeReuseStrategy.setSavedValue(this.targetUrl(this.router,extras["relativeTo"],value),save)    
+
+      this.routeReuseStrategy.saveRoute(this.router.url+"/"+value,extras["relativeTo"].snapshot)
       routedValue = pathState.get(this.routeReuseStrategy.getKey(value))?pathState.get(this.routeReuseStrategy.getKey(value)):value
       if (this.routeReuseStrategy.navMode=="URL")
       {

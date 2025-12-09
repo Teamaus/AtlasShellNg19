@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, Injectable, Injector, OnInit, Type } from '@angular/core';
+import { AfterViewInit, Component, Inject, Injectable, Injector, OnInit, Type, ViewChild } from '@angular/core';
 import { SETNAME, SETUPACTION, SETVALUE } from './c.reducer';
 import { Store, createAction, createFeatureSelector, createSelector } from '@ngrx/store';
 import { ATLAS_SHELL_ENTITY, AtlasShellEntityDirective,AtlasProvideRegistryService, AtlasShellEntityService, AtlasShellModalModuleModule, AtlasShellSelect, ShellActionService, WfRegistryService, AtlasShellNavigationV19Service } from 'atlas-shell-ui';
@@ -45,9 +45,11 @@ export class CComponent implements AfterViewInit {
   static count = 0 
   close = false
   compCounter = 0 
+  @ViewChild(ATLAS_SHELL_ENTITY) atlas_shell_entity?:AtlasShellEntityDirective
   constructor(
     private navigation19Service:AtlasShellNavigationV19Service,
     private compService:AtlasShellEntityService,private store:Store<any>,
+ 
     private activeRout:ActivatedRoute,
     private router:Router,
     private serviceBus:AtlasShellServiceBusService,
@@ -114,7 +116,12 @@ private injector:Injector) {
 
   Nav(op:string){
     
-    this.navigation19Service.navigate([op],true,"C",{relativeTo:this.activeRout})
+    console.log("ATLAS_SHELL_ENTITY",this.atlas_shell_entity)
+    if (this.atlas_shell_entity)
+    {
+      
+      this.atlas_shell_entity.navigate(op,this.activeRout,false)
+    }
    // this.compService.navigateSave([op],{relativeTo:this.activeRout})
    console.log("SASID:",op,this.activeRout,"===>>",this.shellActionService.currentAction,this.shellActionService.sasid)
 

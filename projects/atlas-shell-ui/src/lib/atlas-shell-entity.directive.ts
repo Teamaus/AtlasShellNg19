@@ -7,6 +7,8 @@ import { AtlasChildEntitiesV19Service } from './atlas-child-entities-v19.service
 import { ActivatedRoute, NavigationEnd, Route, Router, RouteReuseStrategy } from '@angular/router';
 import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
 import { filter, take, tap } from 'rxjs';
+import { AtlasShellNavigationV19Service } from './atlas-shell-navigation-v19.service';
+
 
 
 export const ATLAS_SHELL_ENTITY = new InjectionToken<any>("ATLAS_SHELL_ENTITY")
@@ -35,6 +37,7 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
               private store:Store, 
               private shellSelector:AtlasShellSelectorService,
               private shellEntityService:AtlasShellEntityV19Service, 
+              private navigation:AtlasShellNavigationV19Service,
               private childrenEntitiesService:AtlasChildEntitiesV19Service,
               private router:Router,
               private activatedRoute:ActivatedRoute,
@@ -113,6 +116,9 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
 
     }
     return ret
+  }
+  navigate(op:any,activatedRoute:ActivatedRoute,save=true){
+     this.navigation.navigate([op],save,this.entityType(),{relativeTo:activatedRoute})
   }
 
 }
