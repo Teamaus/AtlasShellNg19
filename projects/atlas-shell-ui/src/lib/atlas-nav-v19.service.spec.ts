@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { NavService } from './nav.service';
+import { AtlasNavV19Service } from './atlas-nav-v19.service';
 
-describe('NavService', () => {
-  let service: NavService;
+describe('AtlasNavV19Service', () => {
+  let service: AtlasNavV19Service;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(NavService);
+    service = TestBed.inject(AtlasNavV19Service);
   });
 
   it('should be created', () => {

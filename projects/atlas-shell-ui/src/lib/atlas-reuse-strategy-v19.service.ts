@@ -1,17 +1,24 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router';
-import { NavService } from './nav.service';
-import { NavUtilService } from './nav-util.service';
-import { IMyReuseStrategy } from './contracts/iMyReuseStrategy';
+
+import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { ActivatedRouteSnapshot, DetachedRouteHandle, Router, RouteReuseStrategy } from '@angular/router';
+import { NavUtilsV19Service } from './nav-utils-v19.service';
+import { IAtlasReuseStrategyV19 } from './contracts/IAtlasReuseStrategyV19';
+export const ATLAS_ENTITIES_USE_REUSESTRATEGY = new InjectionToken<any>("ATLAS_ENTITIES_USE_REUSESTRATEGY")
+export const ATLAS_ALL_ENTITIES = "ALL"
+export function AtlasCreateReuseStrategy(useEntities:string[],navUtil:NavUtilsV19Service){
+	console.log("=>>>>",useEntities)
+	return new AtlasReuseStrategyV19Service(useEntities,navUtil)
+  }
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class MyReuseStrategyService extends RouteReuseStrategy implements IMyReuseStrategy {
+export class AtlasReuseStrategyV19Service extends RouteReuseStrategy implements IAtlasReuseStrategyV19 {
   routeStorage : {[url:string]:DetachedRouteHandle} = {}
   saved :{[url:string]:boolean} = {}
-  pathState:{[url:string]:string} = {}
-  constructor(private navUtil:NavUtilService){
+  
+  constructor(@Inject(ATLAS_ENTITIES_USE_REUSESTRATEGY)private useEntities:string[],private navUtil:NavUtilsV19Service){
     super()
   }
   CloseNav(url: string): void {
@@ -58,3 +65,4 @@ export class MyReuseStrategyService extends RouteReuseStrategy implements IMyReu
 
   
 }
+

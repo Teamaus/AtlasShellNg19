@@ -47,7 +47,6 @@ export class CComponent implements AfterViewInit {
   compCounter = 0 
   @ViewChild(ATLAS_SHELL_ENTITY) atlas_shell_entity?:AtlasShellEntityDirective
   constructor(
-    private navigation19Service:AtlasShellNavigationV19Service,
     private compService:AtlasShellEntityService,private store:Store<any>,
  
     private activeRout:ActivatedRoute,
@@ -129,8 +128,9 @@ private injector:Injector) {
     
   }
   VALUE(op:string){
-    this.compService.dispatch(SETVALUE({value:Math.floor(Math.random()*10)}))
-    this.store.dispatch(RAISE_EVENT("shell")({id:this.compService.entity.id,event:"SETVALUE",value:"Random"}))    
+    //this.compService.dispatch(SETVALUE({value:Math.floor(Math.random()*10)}))
+    this.atlas_shell_entity?.dispatch(SETVALUE({value:Math.floor(Math.random()*10)}))
+    this.store.dispatch(RAISE_EVENT("shell")({id:this.atlas_shell_entity?.entity.id,eventSubject:"SET",value:"Random"}))    
   }
   NAME(op:string){
     let arr = ["A","B","X","Y","Z","TT","V"]

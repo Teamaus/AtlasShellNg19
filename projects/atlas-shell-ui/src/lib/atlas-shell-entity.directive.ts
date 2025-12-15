@@ -1,5 +1,5 @@
 import { ContentChildren, Directive, effect, forwardRef, Inject, InjectionToken, input, OnInit, Optional, SkipSelf } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { AtlasShellEntityFactoryService, AtlasShellFactoryService, AtlasShellSelectorService } from 'atlas-shell-logic';
 import { AtlasShellEntityService } from './atlas-shell-entity.service';
 import { AtlasShellEntityV19Service } from './atlas-shell-entity-v19.service';
@@ -8,10 +8,12 @@ import { ActivatedRoute, NavigationEnd, Route, Router, RouteReuseStrategy } from
 import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
 import { filter, take, tap } from 'rxjs';
 import { AtlasShellNavigationV19Service } from './atlas-shell-navigation-v19.service';
+import { AtlasStoreService } from './atlas-store.service';
 
 
 
 export const ATLAS_SHELL_ENTITY = new InjectionToken<any>("ATLAS_SHELL_ENTITY")
+export const ATLAS_SHELL_ENTITY_ID = new InjectionToken<any>("ATLAS_SHELL_ENTITY_ID")
 export interface IAtlasShellEntity
 {
     get childEntities():any[] 
@@ -20,7 +22,10 @@ export interface IAtlasShellEntity
 }
 @Directive({
   selector: 'atlas-shell-entity',
-  providers:[{provide:ATLAS_SHELL_ENTITY,useExisting:forwardRef(()=>AtlasShellEntityDirective)},{provide:AtlasShellEntityV19Service}],
+  providers:[{provide:ATLAS_SHELL_ENTITY,useExisting:forwardRef(()=>AtlasShellEntityDirective)}
+    //,{provide:ATLAS_SHELL_ENTITY_ID,deps:[forwardRef(()=>AtlasShellEntityDirective)],useFactory:(dir:AtlasShellEntityDirective)=>dir.entity.id}
+    ,AtlasStoreService 
+    ,AtlasShellEntityV19Service],
   standalone: false,
   exportAs:'parentEntity'
 })
@@ -34,7 +39,7 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
   The key will be the url itself . But what we will save we need to store the handler 
   */
   constructor(private shellFactory:AtlasShellEntityFactoryService,
-              private store:Store, 
+              
               private shellSelector:AtlasShellSelectorService,
               private shellEntityService:AtlasShellEntityV19Service, 
               private navigation:AtlasShellNavigationV19Service,
@@ -42,6 +47,7 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
               private router:Router,
               private activatedRoute:ActivatedRoute,
               private reuseStrategy:RouteReuseStrategy,
+              private atlasStore:AtlasStoreService,
              @SkipSelf() @Optional() @Inject(ATLAS_SHELL_ENTITY) private parentEntity:AtlasShellEntityDirective ) { 
     
     effect(()=>this.createtOrActivate(this.entityType()))
@@ -51,6 +57,11 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
       
     
   }
+  dispatch(action:Action){
+    
+      this.atlasStore.dispatch(this.entity.id,action)
+  } 
+  
   get childEntities(): any[] {
       return this.childrenEntitiesService.childEntities    
   }
@@ -90,15 +101,16 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
            
           this.shellEntityService.entity = this.entity
           console.log("V19 ACTIVATE:>>> ", this.shellEntityService)
-          this.shellEntityService.setActive()
+          this.atlasStore.setActive(this.entity.id)
         }  
         else
         {
           //Here we are going to create 
           const path = this.getPath()
-          this.entity = this.shellEntityService.createEntity_2(path,type,this.entityCategoty())
+          this.entity = this.atlasStore.createEntity(path,type,this.entityCategoty())
+          console.log("ENTITY CREATED:",this.entity)
           this.shellEntityService.entity = this.entity 
-          console.log
+          
           this.parentEntity.addChildEntity(this.entity)
           console.log("V19 CREATE: ", path)
         }

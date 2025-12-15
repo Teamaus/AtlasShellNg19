@@ -21,12 +21,21 @@ export * from './lib/shell-action.service'
 export * from './lib/atlas-shell-events.service'
 export * from './lib/atlas-shell-modal-module/atlas-shell-modal-module.module'
 export * from './lib/atlas-shell-provide-registry-service'
-export * from './lib/atlas-reuse-strategy'
+//export * from './lib/atlas-reuse-strategy'
 export * from './lib/wf-registry.service'
 export * from './lib/router-outlet-adapter/router-outlet-adapter.component'
 export * from './lib/atlas-shell-entity.directive'
 export * from './lib/atlas-shell-navigation-v19.service'
 export * from './lib/atlas-child-entities-v19.service'
+export * from './lib/atlas-nav-v19.service'
+export * from './lib/path-state-v19.service'
+export * from './lib/nav-utils-v19.service'
+export * from './lib/atlas-reuse-strategy-v19.service'
+export * from './lib/contracts/IAtlasReuseStrategyV19'
+
+
+
+
 
 
 	

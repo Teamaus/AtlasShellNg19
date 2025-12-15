@@ -1,6 +1,6 @@
 import { InjectionToken } from "@angular/core"
 
-export interface IMyReuseStrategy
+export interface IAtlasReuseStrategyV19
 {
 	CloseNav(url:string):void 
 	SaveNav(url:string):void 

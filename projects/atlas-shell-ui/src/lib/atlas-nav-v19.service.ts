@@ -1,16 +1,19 @@
-import { Inject, Injectable } from '@angular/core';
+
+
+import { Inject, Injectable, Optional } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { filter, take } from 'rxjs';
-import { NavUtilService } from './nav-util.service';
-import { PathStateService } from './path-state.service';
-import { IMyReuseStrategy, REUSE_STRATEGY } from './contracts/iMyReuseStrategy';
+import { NavUtilsV19Service } from './nav-utils-v19.service';
+
+import { PathStateV19Service } from './path-state-v19.service';
+import { IAtlasReuseStrategyV19, REUSE_STRATEGY } from './contracts/IAtlasReuseStrategyV19';
 
 @Injectable()
-export class NavService {
+export class AtlasNavV19Service {
   
   constructor(private router:Router,private activatedoute:ActivatedRoute,
-    private navUtil:NavUtilService,private pathStateServie:PathStateService,
-  @Inject(REUSE_STRATEGY)private myReuseStrategy:IMyReuseStrategy) { }
+    private navUtil:NavUtilsV19Service,private pathStateServie:PathStateV19Service,
+  @Optional() @Inject(REUSE_STRATEGY)private myReuseStrategy:IAtlasReuseStrategyV19) { }
   setSaveRoute(save:boolean){
     this.router.events.pipe(
       filter(event=>event instanceof NavigationEnd),
@@ -45,12 +48,15 @@ export class NavService {
     const navUrl = this.pathStateServie.getPathState(this.activatedoute.snapshot,this.navUtil.navValue(value))
     if (!navUrl)
     {
+    
       this.router.navigate(value,{relativeTo:this.activatedoute})
     }
     else
     {
+    
       this.router.navigateByUrl(navUrl)
     }
 
   }
 }
+

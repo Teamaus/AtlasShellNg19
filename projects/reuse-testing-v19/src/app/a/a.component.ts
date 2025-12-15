@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { NavService } from '../nav.service';
+import { AtlasNavV19Service } from 'atlas-shell-ui';
+
 
 @Component({
   selector: 'app-a',
   standalone: false,
   templateUrl: './a.component.html',
   styleUrl: './a.component.css',
-  providers:[{provide:NavService}]
+  providers:[AtlasNavV19Service]
 })
 export class AComponent {
-  constructor(public navService:NavService)
+  constructor(public navService:AtlasNavV19Service)
   {
   
   }
