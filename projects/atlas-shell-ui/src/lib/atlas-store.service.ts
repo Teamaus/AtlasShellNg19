@@ -1,19 +1,20 @@
 import { Inject, Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { actionTypeToEntityActionType, ATLAS_SET_ACTIVE_INSTANCE_ACTION, ATLAS_SHELL_TOKEN, AtlasShellEntityFactoryService, AtlasShellRegistryService, createCompositeAction, TREE_ADDENTITY, TREE_SETACTIVE } from 'atlas-shell-logic';
+import { Observable } from 'rxjs';
+import { AtlasStoreBaseService } from './atlas-store-base.service';
 
 
 
 
 @Injectable()
-export class AtlasStoreService {
-    get add_e(){ return  TREE_ADDENTITY(this.shellToken)}
-    get activate_e(){return  TREE_SETACTIVE(this.shellToken)}
-  
+export class AtlasStoreService extends AtlasStoreBaseService {
+    
   constructor(private store:Store,
-              @Inject(ATLAS_SHELL_TOKEN)private shellToken:string,
+              @Inject(ATLAS_SHELL_TOKEN) shellToken:string,
               private shellEntityFactory:AtlasShellEntityFactoryService,
               private registryService:AtlasShellRegistryService) {
+                super(shellToken)
       
   }
   dispatch(id:string,action:Action,useID=true)
@@ -46,7 +47,9 @@ export class AtlasStoreService {
     this.store.dispatch(actions)
     return ent
   }
-  
+  select(mapFn: (state: object) => any):Observable<any>{
+    return this.store.select(mapFn)
+  }  
 
 
 }

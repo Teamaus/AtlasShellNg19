@@ -11,7 +11,8 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { BComponent } from './b/b.component';
 
-import { ATLAS_ENTITIES_USE_REUSESTRATEGY, AtlasCreateReuseStrategy, AtlasNavV19Service, AtlasReuseStrategyV19Service, NavUtilsV19Service, REUSE_STRATEGY } from 'atlas-shell-ui';
+import { ATLAS_ENTITIES_USE_REUSESTRATEGY, AtlasCreateReuseStrategy_19, AtlasNavV19Service, AtlasReuseStrategyV19Service, NavUtilsV19Service, REUSE_STRATEGY } from 'atlas-shell-ui';
+import { NavUtilService } from './nav-util.service';
 
 @NgModule({
   declarations: [
@@ -28,11 +29,11 @@ import { ATLAS_ENTITIES_USE_REUSESTRATEGY, AtlasCreateReuseStrategy, AtlasNavV19
   providers: [{provide:RouteReuseStrategy,useClass:AtlasReuseStrategyV19Service}
               ,{provide:REUSE_STRATEGY,useExisting:RouteReuseStrategy}
               ,AtlasNavV19Service
-            
+              
             ,{provide:ATLAS_ENTITIES_USE_REUSESTRATEGY,useValue:["A","A1","A2"]},
                 {
                 provide: RouteReuseStrategy,
-                useFactory:AtlasCreateReuseStrategy,
+                useFactory:AtlasCreateReuseStrategy_19,
                 deps:[ATLAS_ENTITIES_USE_REUSESTRATEGY,NavUtilsV19Service]
                 },],
   bootstrap: [AppComponent]

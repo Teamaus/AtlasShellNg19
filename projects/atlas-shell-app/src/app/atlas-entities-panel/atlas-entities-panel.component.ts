@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { ATLAS_SHELL_ENTITY, AtlasShellEntityService, AtlasShellNavigationV19Service, IAtlasShellEntity } from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasNavV19Service, AtlasShellEntityService, AtlasShellNavigationV19Service, IAtlasShellEntity } from 'atlas-shell-ui';
 
 
 import { Observable } from 'rxjs';
@@ -24,10 +24,12 @@ export class AtlasEntitiesPanelComponent implements OnInit {
   
   constructor(private componentService:AtlasShellEntityService,private router:Router,
     private activatedRoute:ActivatedRoute,
-    private shellNavigationService:AtlasShellNavigationV19Service
+    private shellNavigationService:AtlasShellNavigationV19Service,
+    private navService:AtlasNavV19Service,
+    @Inject(ATLAS_SHELL_ENTITY) private atlas_shell_entity:AtlasShellRootDirective
     
   ) { 
-        
+        console.log("ATLAS SHELL ROOT ENTITY:",this.atlas_shell_entity)
         
   }
 
@@ -59,8 +61,10 @@ export class AtlasEntitiesPanelComponent implements OnInit {
               console.log("NAV TO ",type,":",{outlets:{[this.entityID]:[type]}})
               
              // this.router.navigate([{outlets:{["root_"+this.entityID]:[type]}}])
-           //  this.shellNavigationService.navigate([{outlets:{["root_"+this.entityID]:[type]}}],true,type,{relativeTo:this.activatedRoute})
-              this.shellNavigationService.NavEntity(this.entityID,type,this.activatedRoute)
+           // this.shellNavigationService.navigate([{outlets:{["root_"+this.entityID]:[type]}}],true,type,{relativeTo:this.activatedRoute})
+              
+             this.atlas_shell_entity.navigate(type)
+             // this.shellNavigationService.NavEntity(this.entityID,type,this.activatedRoute)
           }
           else
           {

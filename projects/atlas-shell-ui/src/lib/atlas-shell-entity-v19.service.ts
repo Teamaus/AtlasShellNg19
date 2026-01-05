@@ -21,31 +21,15 @@ import { IShellEntity } from 'atlas-shell-logic';
 import { ShellActionService } from './shell-action.service';
 import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
 import { AtlasNavigationEndService } from './atlas-navigation-end.service';
-
-
-export function base64UrlEncode(str: string): string {
-  return btoa(str)
-    .replace(/\+/g, '-')   // החלף + ב־-
-    .replace(/\//g, '_')   // החלף / ב־_
-    .replace(/=+$/, '');   // הסר = בסוף
-}
-
-export function base64UrlDecode(str: string): string {
-  // החזר את התווים ל-Base64 רגיל
-  let base64 = str
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
-  // הוסף חזרה את ה־= שחסרים
-  while (base64.length % 4 !== 0) {
-    base64 += '=';
-  }
-  return atob(base64);
-}
+import { AtlasStoreService } from './atlas-store.service';
+import { base64UrlDecode, base64UrlEncode } from './entity-utils';
+import { AtlasRootStoreService } from './atlas-root-store.service';
+import { AtlasNavV19Service } from './atlas-nav-v19.service';
 
 
 
-export const rootCategory=(id:string)=>"root_"+id
-export let es_counter = 0 
+const rootCategory=(id:string)=>"root_"+id
+let es_counter = 0 
 function getCounter(){
   const retval = ++es_counter
   console.log("ES_COUNTER:",retval)
@@ -65,8 +49,11 @@ export class AtlasShellEntityV19Service implements IShellEntity {
   instanceID = getCounter()
   constructor(
     private store:Store<any>,
-    private router:Router,private activatedRoute:ActivatedRoute
-    ,private shellEntityFactory:AtlasShellEntityFactoryService,
+    private atlasStore:AtlasStoreService,
+    private atlasRootStore:AtlasRootStoreService,
+    private router:Router,private activatedRoute:ActivatedRoute,
+    private navService:AtlasNavV19Service,
+    private shellEntityFactory:AtlasShellEntityFactoryService,
     private shellSelector:AtlasShellSelectorService,
     private registryService:AtlasShellRegistryService,
     @Inject(ATLAS_SHELL_TOKEN)private shellToken:string,
@@ -77,8 +64,8 @@ export class AtlasShellEntityV19Service implements IShellEntity {
     private injector:Injector,
     private location:Location,
     private atlasNavigationEnd:AtlasNavigationEndService,
-    @Optional() @Inject(RouteReuseStrategy) private routeReuseStrategy:AtlasShellReuseStrategy) 
-    { 
+    @Optional() @Inject(RouteReuseStrategy) private routeReuseStrategy:AtlasShellReuseStrategy,
+      )    { 
       this.atlasNavigationEnd.navigationEnd.pipe(filter(param=>!this.entity)).subscribe(
         param=>{
           console.log("Yup we are here 3",param)
@@ -104,20 +91,20 @@ export class AtlasShellEntityV19Service implements IShellEntity {
     
     let entityParam =base64UrlDecode(param)
       console.log("createOrActivateChildRootEntity 5",param)
-    if (entityParam!="")
+    /*if (entityParam!="")
     {
     
       this.entity = JSON.parse(entityParam)
         console.log("createOrActivateChildRootEntity 5.1",this.entity)
       this.entitySubject.next(this.entity)
     
-    }
+    }*/
     
     this.initSelectors()
 
   }
   setEntity(id:string){
-    this.store.select(this.shellSelector.entityTreeIDSelector(id))
+    this.atlasStore.select(this.shellSelector.entityTreeIDSelector(id))
     .pipe(take(1))
     .subscribe(
       entity=>{
@@ -134,7 +121,8 @@ export class AtlasShellEntityV19Service implements IShellEntity {
 
   navCountObj :any = {BACK:0,SET:0} 
   closeRoute(op:string){
-    this.closeRoute_({value:[op],reuse:false,close:true})
+   // this.closeRoute_({value:[op],reuse:false,close:true})
+    this.navService.Close_(op,"",this.activatedRoute)
   }
   
   closeRoute_(v:any){
@@ -144,12 +132,14 @@ export class AtlasShellEntityV19Service implements IShellEntity {
   }
   
   navigate(value:any,extras?:any|undefined){
-  
-    this.navigate_(value,true,extras)
+    
+    this.navService.Nav_(value[0],"",extras,false)
+    //this.navigate_(value,true,extras)
   }
   navigateSave(value:any,extras?:any|undefined){
-  
-    this.navigate_(value,true,extras)
+    
+    this.navService.Nav_(value[0],"",extras,true)
+    //this.navigate_(value,true,extras)
   }
   navigate_(value:any,save:boolean,extras?:any|undefined){
     let routedValue = value
@@ -188,8 +178,8 @@ export class AtlasShellEntityV19Service implements IShellEntity {
   getEventObservable(event:string,eventSubject:string):Observable<any>{
         let eventSubjectSelector =  this.shellSelector.eventSubjectSelector(this.entity.id,event,eventSubject)
         let eventValueSelector = this.shellSelector.eventValueSelector(this.entity.id,event)
-        let value$ = this.store.select(eventValueSelector).pipe(filter(v=>v!=undefined))
-        let subject$ = this.store.select(eventSubjectSelector).pipe(
+        let value$ = this.atlasStore.select(eventValueSelector).pipe(filter(v=>v!=undefined))
+        let subject$ = this.atlasStore.select(eventSubjectSelector).pipe(
           filter(v=>v!=undefined && v[eventSubject]!=this.navCountObj[eventSubject]))
         let retval$ = subject$.pipe(
           tap(v=>this.navCountObj[eventSubject]=v[eventSubject]),
@@ -212,16 +202,16 @@ export class AtlasShellEntityV19Service implements IShellEntity {
 
           let entitiesIDSSelector = this.shellEntityFactory.getEntitiesIDSSelctor(entitySelector)
           
-          this.entitiesIDS = this.store.select(entitiesIDSSelector)
+          this.entitiesIDS = this.atlasStore.select(entitiesIDSSelector)
           let entitiesSelector = createSelector(
             entitySelector,
             (entity:any)=>entity.entities
           )
-          this.childEntities$ = this.store.select(entitiesSelector)
+          this.childEntities$ = this.atlasStore.select(entitiesSelector)
           .pipe(filter(entities=>entities))
           .pipe(map(entities=>Object.keys(entities).filter(key=>key!="0").map(key=>entities[key])))
-          this.store.select(entitiesIDSSelector).subscribe(entities=>this.childEntities = entities)
-          this.store.select(entitySelector).subscribe((entity:any)=>this.childEntities = entity.entities)
+          this.atlasStore.select(entitiesIDSSelector).subscribe(entities=>this.childEntities = entities)
+          this.atlasStore.select(entitySelector).subscribe((entity:any)=>this.childEntities = entity.entities)
           if (this.entity)
           {
               this.getEventObservable("NAVIGATE","SET")
@@ -254,24 +244,20 @@ export class AtlasShellEntityV19Service implements IShellEntity {
                 v=>{
                   this.modelService.navigateModal(this.entity.id,v.value,v.value,this.injector)
                 })
-             
-             
-
-
-                
             }
-        
   }
 
   NavEntity(entity:AtlasShellEntity){
-    if (entity.category!=''){
+    /*if (entity.category!=''){
       let param = base64UrlEncode(JSON.stringify(entity))
       
       if (this.routeReuseStrategy)
         this.routeReuseStrategy.setEntityType(entity.type)
      console.log("V19 entityIDSelectorSubscribe",entity,param)
      this.navigateSave([{outlets:{[entity.category]:[entity.type,param]}}], {relativeTo:this.activatedRoute})
-    }
+     
+    }*/
+    this.navService.Nav(entity.type,"")
   }
   private getID = ()=> this.entity?this.entity.id:this.atlasShellAction.getActiveInstanceID()
   entitySubject = new BehaviorSubject<any>(undefined);
@@ -288,9 +274,7 @@ export class AtlasShellEntityV19Service implements IShellEntity {
   }
   dispatch(action:Action,useID=true){
     //this.atlasShellAction.currentAction = action
-    
-    let compositeAction = this.atlasAction(action)
-    useID?this.store.dispatch(compositeAction):this.store.dispatch(action)
+    this.atlasStore.dispatch(this.entity.id,action,useID)
     
   }
   createChildEntity(type:string,category:string){
@@ -323,7 +307,7 @@ export class AtlasShellEntityV19Service implements IShellEntity {
   
   entityIDSelectorSubscribe(id:string,isChild=true){
     
-    return this.store.select(this.shellSelector.entityTreeIDSelector(id))
+    return this.atlasStore.select(this.shellSelector.entityTreeIDSelector(id))
     .pipe(
       filter(e=>(e!=undefined)),
       take(1)
@@ -340,9 +324,7 @@ export class AtlasShellEntityV19Service implements IShellEntity {
     
   }
   setActive(){
-    const path:string[] = []
-    const id = this.entity.id
-    this.store.dispatch(this.activate_e({id,path}))
+    this.atlasStore.setActive(this.entity.id)
   }
   createEntity_2(path:string[],type:string,category:string):any{
     let ent = this.shellEntityFactory.createEntity(type,category)

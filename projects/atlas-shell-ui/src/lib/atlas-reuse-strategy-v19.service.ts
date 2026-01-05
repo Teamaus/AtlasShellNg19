@@ -5,7 +5,7 @@ import { NavUtilsV19Service } from './nav-utils-v19.service';
 import { IAtlasReuseStrategyV19 } from './contracts/IAtlasReuseStrategyV19';
 export const ATLAS_ENTITIES_USE_REUSESTRATEGY = new InjectionToken<any>("ATLAS_ENTITIES_USE_REUSESTRATEGY")
 export const ATLAS_ALL_ENTITIES = "ALL"
-export function AtlasCreateReuseStrategy(useEntities:string[],navUtil:NavUtilsV19Service){
+export function AtlasCreateReuseStrategy_19(useEntities:string[],navUtil:NavUtilsV19Service){
 	console.log("=>>>>",useEntities)
 	return new AtlasReuseStrategyV19Service(useEntities,navUtil)
   }

@@ -1,7 +1,7 @@
 import { Directive, forwardRef, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AtlasShellSelectorService } from 'atlas-shell-logic';
-import { ATLAS_SHELL_ENTITY, IAtlasShellEntity } from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasNavV19Service, IAtlasShellEntity, NavUtilsV19Service } from 'atlas-shell-ui';
 import { AtlasChildEntitiesV19Service } from 'atlas-shell-ui';
 import { switchMap, take, tap } from 'rxjs';
 
@@ -19,9 +19,15 @@ export class AtlasShellRootDirective implements IAtlasShellEntity,OnInit {
   activeType = ""
   entityID = "" 
   constructor(private store:Store,private shellSelector:AtlasShellSelectorService,
-    private childrenEntitiesService:AtlasChildEntitiesV19Service) {
+    private childrenEntitiesService:AtlasChildEntitiesV19Service,
+    private navService:AtlasNavV19Service
+  ) {
+      
 
    }
+  navigate(op:string){
+    this.navService.Nav(op,`root_${this.activeType}`,false)
+  }
   searchChildEntity(type: string) {
     this.childrenEntitiesService.childEntities = this._childrenType[this.activeType]
     return this.childrenEntitiesService.searchEntity(type)
@@ -35,7 +41,7 @@ export class AtlasShellRootDirective implements IAtlasShellEntity,OnInit {
     )
     
     this.store.select(this.shellSelector.rootEntitiesSelector())
-    .subscribe(state=>console.log("ROOTD=>ENTITIES",state[this.activeType].entities))
+    .subscribe(state=>console.log("ROOTD=>ENTITIES",state[this.activeType].entities,this.activeType))
     
     
   }
@@ -56,6 +62,7 @@ export class AtlasShellRootDirective implements IAtlasShellEntity,OnInit {
     
     
   }
+  
   getPath():string[]{
     return [this.activeType]
   }

@@ -32,6 +32,8 @@ export * from './lib/path-state-v19.service'
 export * from './lib/nav-utils-v19.service'
 export * from './lib/atlas-reuse-strategy-v19.service'
 export * from './lib/contracts/IAtlasReuseStrategyV19'
+export * from './lib/atlas-shell-entity-v19.service'
+export * from './lib/atlas-store.service'
 
 
 

@@ -11,7 +11,7 @@ import { AComponent } from './a/a.component';
 import { O1Component } from './o1/o1.component';
 import { O2Component } from './o2/o2.component';
 import { O3Component } from './o3/o3.component';
-import { AtlasShellUIModule, ShellEntityModule, ATLAS_ENTITIES_USE_REUSESTRATEGY, AtlasCreateReuseStrategy, 
+import { AtlasShellUIModule, ShellEntityModule, ATLAS_ENTITIES_USE_REUSESTRATEGY, AtlasCreateReuseStrategy_19, AtlasReuseStrategyV19Service, REUSE_STRATEGY, AtlasNavV19Service, NavUtilsV19Service, 
  } from 'atlas-shell-ui';
 import { AtlasEntitiesPanelComponent } from './atlas-entities-panel/atlas-entities-panel.component';
 import { AtlasRootEntityComponent } from './atlas-root-entity/atlas-root-entity.component';
@@ -53,19 +53,17 @@ type slices = "shell" | "doc"
     DirTestComponent,
     AtlasShellRootDirective,
     
-    
-    
-    
-    
   ],
-  providers: [
-    {provide:ATLAS_ENTITIES_USE_REUSESTRATEGY,useValue:["B","O3","C"]},
-    {
-    provide: RouteReuseStrategy,
-    useFactory:AtlasCreateReuseStrategy,
-    deps:[ATLAS_ENTITIES_USE_REUSESTRATEGY]
-    },
-  ],
+  providers: [{provide:RouteReuseStrategy,useClass:AtlasReuseStrategyV19Service}
+                ,{provide:REUSE_STRATEGY,useExisting:RouteReuseStrategy}
+                ,AtlasNavV19Service
+                
+              ,{provide:ATLAS_ENTITIES_USE_REUSESTRATEGY,useValue:["A","A1","A2"]},
+                  {
+                  provide: RouteReuseStrategy,
+                  useFactory:AtlasCreateReuseStrategy_19,
+                  deps:[ATLAS_ENTITIES_USE_REUSESTRATEGY,NavUtilsV19Service]
+                  },],
   imports: [
     BrowserModule,
     AppRoutingModule,

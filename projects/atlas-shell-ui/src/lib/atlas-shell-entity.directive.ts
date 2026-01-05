@@ -5,10 +5,10 @@ import { AtlasShellEntityService } from './atlas-shell-entity.service';
 import { AtlasShellEntityV19Service } from './atlas-shell-entity-v19.service';
 import { AtlasChildEntitiesV19Service } from './atlas-child-entities-v19.service';
 import { ActivatedRoute, NavigationEnd, Route, Router, RouteReuseStrategy } from '@angular/router';
-import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
-import { filter, take, tap } from 'rxjs';
 import { AtlasShellNavigationV19Service } from './atlas-shell-navigation-v19.service';
 import { AtlasStoreService } from './atlas-store.service';
+import { AtlasNavV19Service } from './atlas-nav-v19.service';
+
 
 
 
@@ -25,7 +25,8 @@ export interface IAtlasShellEntity
   providers:[{provide:ATLAS_SHELL_ENTITY,useExisting:forwardRef(()=>AtlasShellEntityDirective)}
     //,{provide:ATLAS_SHELL_ENTITY_ID,deps:[forwardRef(()=>AtlasShellEntityDirective)],useFactory:(dir:AtlasShellEntityDirective)=>dir.entity.id}
     ,AtlasStoreService 
-    ,AtlasShellEntityV19Service],
+    
+  , AtlasNavV19Service],
   standalone: false,
   exportAs:'parentEntity'
 })
@@ -40,17 +41,19 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
   */
   constructor(private shellFactory:AtlasShellEntityFactoryService,
               
-              private shellSelector:AtlasShellSelectorService,
-              private shellEntityService:AtlasShellEntityV19Service, 
-              private navigation:AtlasShellNavigationV19Service,
+              public shellSelector:AtlasShellSelectorService,
+              private navigation:AtlasNavV19Service,
               private childrenEntitiesService:AtlasChildEntitiesV19Service,
-              private router:Router,
-              private activatedRoute:ActivatedRoute,
               private reuseStrategy:RouteReuseStrategy,
               private atlasStore:AtlasStoreService,
-             @SkipSelf() @Optional() @Inject(ATLAS_SHELL_ENTITY) private parentEntity:AtlasShellEntityDirective ) { 
+               @SkipSelf() @Optional() @Inject(ATLAS_SHELL_ENTITY) private parentEntity:AtlasShellEntityDirective,
+              @Optional() private shellEntityService:AtlasShellEntityV19Service ) { 
     
-    effect(()=>this.createtOrActivate(this.entityType()))
+    effect(()=>{
+                  this.createtOrActivate(this.entityType())
+                  this.shellEntityService.entity = this.entity
+                  console.log("SHELL_ENTITY_SERVICE",this.shellEntityService)
+                })
       console.log("DIRECTIVE CONSTRUCTOR PARENT:",this.parentEntity)
      
    
@@ -76,29 +79,17 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
   ngOnInit(): void {
       this.shellFactory.getInstanceID()
        console.log("DIRECTIVE: atlas-shell-entity",this.entityType(),this.entityCategoty(),++this.counter)
-        this.router.events.pipe(tap(event=>console.log("EVENT>>>",event)),filter(event=>event instanceof NavigationEnd)).subscribe(event=> {
-      
-      const reuseStrategy = this.reuseStrategy as AtlasShellReuseStrategy
-      
-      console.log("ROUTER EVENT IN DIRECTIVE:",this.router.routerState.snapshot,event)
-      
-    }
-  )
+        
   }
   createtOrActivate(type:string){
       let ret = "Create"
-      
-      
       if (this.parentEntity)
       { 
-        
-        
         console.log("ATLAS_SHELL_ENTITY_DIRECTIVE",this.parentEntity)  
         this.entity = this.parentEntity.searchChildEntity(type)
         if (this.entity)
         {
           ret="Activate"
-           
           this.shellEntityService.entity = this.entity
           console.log("V19 ACTIVATE:>>> ", this.shellEntityService)
           this.atlasStore.setActive(this.entity.id)
@@ -110,7 +101,6 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
           this.entity = this.atlasStore.createEntity(path,type,this.entityCategoty())
           console.log("ENTITY CREATED:",this.entity)
           this.shellEntityService.entity = this.entity 
-          
           this.parentEntity.addChildEntity(this.entity)
           console.log("V19 CREATE: ", path)
         }
@@ -130,7 +120,7 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
     return ret
   }
   navigate(op:any,activatedRoute:ActivatedRoute,save=true){
-     this.navigation.navigate([op],save,this.entityType(),{relativeTo:activatedRoute})
+     this.navigation.Nav(op,"")
   }
 
 }

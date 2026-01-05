@@ -31,17 +31,41 @@ export class AtlasNavV19Service {
     
     
   }
+  Close_(op:string,outlet:string,activeRoute:ActivatedRoute)
+  {
+    const url = this.navUtil.getFutureUrl(activeRoute.snapshot,op,activeRoute.outlet)
+    this.myReuseStrategy.CloseNav(url)
+    console.log("REUSE:Close",this.myReuseStrategy)
+  
+  }
+  
   Close(op:string,outlet:string)
   {
     
-    const url = this.navUtil.getFutureUrl(this.activatedoute.snapshot,op,outlet)
-    this.myReuseStrategy.CloseNav(url)
-    console.log("REUSE:Close",this.myReuseStrategy)
+    this.Close_(op,outlet,this.activatedoute) 
+  }
+  Nav_(op:string,outlet:string,activeRoute:ActivatedRoute,save = true)
+  {
+      this.setSaveRoute(save)
     
+    const value = outlet==""?[op]:[{outlets:{[outlet]:op}}]
+    
+    const navUrl = this.pathStateServie.getPathState(this.activatedoute.snapshot,this.navUtil.navValue(value))
+    if (!navUrl)
+    {
+    
+      this.router.navigate(value,{relativeTo:activeRoute})
+    }
+    else
+    {
+    
+      this.router.navigateByUrl(navUrl)
+    }  
   }
   Nav(op:string,outlet:string,save = true)
   {
-    this.setSaveRoute(save)
+    this.Nav_(op,outlet,this.activatedoute,save)
+    /*this.setSaveRoute(save)
     
     const value = outlet==""?[op]:[{outlets:{[outlet]:op}}]
     
@@ -55,7 +79,7 @@ export class AtlasNavV19Service {
     {
     
       this.router.navigateByUrl(navUrl)
-    }
+    }*/
 
   }
 }

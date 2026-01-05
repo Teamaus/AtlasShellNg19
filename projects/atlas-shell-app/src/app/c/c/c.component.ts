@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Inject, Injectable, Injector, OnInit, Type, ViewChild } from '@angular/core';
 import { SETNAME, SETUPACTION, SETVALUE } from './c.reducer';
 import { Store, createAction, createFeatureSelector, createSelector } from '@ngrx/store';
-import { ATLAS_SHELL_ENTITY, AtlasShellEntityDirective,AtlasProvideRegistryService, AtlasShellEntityService, AtlasShellModalModuleModule, AtlasShellSelect, ShellActionService, WfRegistryService, AtlasShellNavigationV19Service } from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasShellEntityDirective,AtlasProvideRegistryService, AtlasShellEntityService, AtlasShellModalModuleModule, AtlasShellSelect, ShellActionService, WfRegistryService, AtlasShellNavigationV19Service, AtlasShellEntityV19Service, AtlasStoreService } from 'atlas-shell-ui';
 import { nestedSelector } from 'atlas-utils';
 import { EFFECT_ACTION } from '../c.actions';
 import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { CService } from '../../c.service';
 import { DocService } from '../../doc.service';
 import { filter, switchMap } from 'rxjs/operators';
 import { IHandler, IWfCustomRunner, WfCurrentDirective, WfForDirective, WfManagerService } from 'atlas-shell-wf';
+
 
 
 
@@ -38,7 +39,7 @@ function demo(...deps:Type<any>[]){
   selector: 'app-c',
   templateUrl: './c.component.html',
   styleUrls: ['./c.component.css'],
-  providers:[EffectService,AtlasProvideRegistryService(CService,DocService),AtlasShellEntityService,WfManagerService]
+  providers:[EffectService,AtlasProvideRegistryService(CService,DocService),AtlasShellEntityV19Service,AtlasStoreService,WfManagerService]
   
 })
 export class CComponent implements AfterViewInit {
@@ -47,7 +48,7 @@ export class CComponent implements AfterViewInit {
   compCounter = 0 
   @ViewChild(ATLAS_SHELL_ENTITY) atlas_shell_entity?:AtlasShellEntityDirective
   constructor(
-    private compService:AtlasShellEntityService,private store:Store<any>,
+    private compService:AtlasShellEntityV19Service,private store:Store<any>,
  
     private activeRout:ActivatedRoute,
     private router:Router,
@@ -80,7 +81,7 @@ private injector:Injector) {
     //obs$.subscribe((obj)=>console.log("SERVICEBUS GOTIT=>>>",obj))
     //console.log("C INIT",obs$)
     let selector2 = this.compService.shellEntitySelector(selectorA,"cData")
-    let selector3 = this.compService.shellEntitySelector(selectorB,"cData")
+    this.store.select(selector2).subscribe(s=>console.log("S=>>>",s))
     /*this.store.select(selectorA)
     .subscribe(state=>console.log("STATE APP A",state))*/
     //AtlasShellSelect(this.compService,this.store.select(selector2))
@@ -114,13 +115,15 @@ private injector:Injector) {
   }
 
   Nav(op:string){
-    
+    alert ("In here ...")
     console.log("ATLAS_SHELL_ENTITY",this.atlas_shell_entity)
-    if (this.atlas_shell_entity)
+   /* if (this.atlas_shell_entity)
     {
       
       this.atlas_shell_entity.navigate(op,this.activeRout,false)
-    }
+    }*/
+   this.compService.navigateSave([op],this.activeRout)
+   
    // this.compService.navigateSave([op],{relativeTo:this.activeRout})
    console.log("SASID:",op,this.activeRout,"===>>",this.shellActionService.currentAction,this.shellActionService.sasid)
 
