@@ -15,7 +15,7 @@ const routes: Routes = [
   {path:'',component:CShellComponent,children:[
     
     {path:'',component:CComponent,
-    children:[{path:'',component:CO1Component,children:[{path:'CO12',component:Co12Component},{path:'CO13',component:Co13Component}]},
+    children:[//{path: '', redirectTo: 'CO1', pathMatch: 'full'},
     {path:'CO1',component:CO1Component,children:[{path:'CO12',component:Co12Component},{path:'CO13',component:Co13Component}]},
     
     

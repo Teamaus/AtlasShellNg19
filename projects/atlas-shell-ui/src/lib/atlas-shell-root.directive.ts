@@ -1,15 +1,19 @@
 import { Directive, forwardRef, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AtlasShellSelectorService } from 'atlas-shell-logic';
-import { ATLAS_SHELL_ENTITY, AtlasNavV19Service, IAtlasShellEntity, NavUtilsV19Service } from 'atlas-shell-ui';
-import { AtlasChildEntitiesV19Service } from 'atlas-shell-ui';
+//import { ATLAS_SHELL_ENTITY, AtlasNavV19Service, IAtlasShellEntity, NavUtilsV19Service } from 'atlas-shell-ui';
+
 import { switchMap, take, tap } from 'rxjs';
+import { AtlasChildEntitiesV19Service } from './atlas-child-entities-v19.service';
+import { ATLAS_SHELL_ENTITY, IAtlasShellEntity } from './atlas-shell-entity.directive';
+import { AtlasNavV19Service } from './atlas-nav-v19.service';
 
 @Directive({
   selector: 'atlas-shell-root',
   standalone: false,
   providers:[{provide:ATLAS_SHELL_ENTITY,useExisting:forwardRef(()=>AtlasShellRootDirective)},
               {provide:AtlasChildEntitiesV19Service}
+            ,{provide:AtlasNavV19Service}
   ],
   exportAs:"atlasShellRoot"
 })

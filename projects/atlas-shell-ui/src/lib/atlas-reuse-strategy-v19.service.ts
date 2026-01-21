@@ -30,7 +30,7 @@ export class AtlasReuseStrategyV19Service extends RouteReuseStrategy implements 
   override shouldDetach(route: ActivatedRouteSnapshot): boolean {
      
       const url = this.navUtil.getURLfromSnapshotWithOutlet(route)
-       console.log("Shoule Detach",url,this.saved[url])
+       console.log("Should Detach",url,this.saved[url])
       return this.saved[url]
       
   }

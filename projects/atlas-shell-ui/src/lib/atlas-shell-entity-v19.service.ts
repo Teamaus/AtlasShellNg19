@@ -191,7 +191,8 @@ export class AtlasShellEntityV19Service implements IShellEntity {
   navigateFunc(v:any,eventSubject:string){
     const ar = this.routeReuseStrategy?this.routeReuseStrategy.currentShellActionActivatedRoute?this.routeReuseStrategy.currentShellActionActivatedRoute:this.activatedRoute:this.activatedRoute
     
-    this.navigate_(v.value.value,v.value.reuse,{relativeTo:ar})
+   // this.navigate_(v.value.value,v.value.reuse,{relativeTo:ar})
+   this.navService.Nav_(v.value,"",ar)
   }
   initSelectors(){
         let entitySelector = this.shellSelector.rootSelector() ///Take the root 

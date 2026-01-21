@@ -13,11 +13,12 @@ import { AtlasShellModalModuleModule } from '../atlas-shell-modal-module/atlas-s
 
 import { AtlasShellUIModule } from '../atlas-shell-ui.module';
 import { AtlasShellEntityDirective } from '../atlas-shell-entity.directive';
+import { AtlasShellRootDirective } from '../atlas-shell-root.directive';
 
 @NgModule({
-  declarations:[AtlasShellEntityDirective],
+  declarations:[AtlasShellEntityDirective,AtlasShellRootDirective],
   imports: [CommonModule],
-  exports:[AtlasShellEntityDirective]
+  exports:[AtlasShellEntityDirective,AtlasShellRootDirective]
   
 })
 export class ShellEntityModule {

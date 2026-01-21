@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 
 
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { AtlasShellEntityService, AtlasShellFormService} from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasShellEntityDirective, AtlasShellEntityService, AtlasShellFormService} from 'atlas-shell-ui';
 
 @Component({
   standalone:false,
@@ -16,6 +16,7 @@ import { AtlasShellEntityService, AtlasShellFormService} from 'atlas-shell-ui';
   
 })
 export class BComponent implements OnInit {
+  @ViewChild(ATLAS_SHELL_ENTITY) shell_entity?: AtlasShellEntityDirective
   frm = new FormGroup({
     ID:new FormControl('')
   })
@@ -28,7 +29,10 @@ export class BComponent implements OnInit {
       
       console.log("BComponent...")
    }
-
+  ngAfterViewInit()
+  {
+      console.log("BSHELL ENTITY DIRECTIVE:",this.shell_entity)
+  }
   ngOnInit(): void {
     console.log("B COMPONENT>>> INIT>>> CTOR",this.compService.entity)
    // this.frm = this.formService.createForm("BPersonalDetails",{ID:new FormControl('')})

@@ -1,22 +1,22 @@
 	
 	<atlas-shell-entity entityType="C">
-	<div *ngIf="!close">
-	<button (click)="toggleClose()">toggle close</button>
-	<p>c works!</p>
-	<button (click)="VALUE('CO1')">VALUE</button>
-	<button (click)="NAME('CO1')">NAME</button>
-	<button (click)="Nav('CO1')">NavCO1</button>
-	<button (click)="Nav('B1')">NavB</button>
-	<button (click)="Nav('CO2')">NavCO2</button>
-	<button (click)="NavClose('CO1','B1')">Close CO1</button>
-	<button (click)="NavClose('B1','CO1')">Close-B1</button>
-	<button (click)="removeTopic()">Remove Topic</button>
-	<button (click)="logEntity()">LogEntity</button><br/>
-	<input/>
-	<div>=============</div>
-	<router-outlet>
-		
-	</router-outlet>
-	</div>
-</atlas-shell-entity>
+		<div *ngIf="!close">
+		<button (click)="toggleClose()">toggle close</button>
+		<p>c works!</p>
+		<button (click)="VALUE('CO1')">VALUE</button>
+		<button (click)="NAME('CO1')">NAME</button>
+		<button (click)="Nav('CO1')">NavCO1</button>
+		<button (click)="Nav('B1')">NavB</button>
+		<button (click)="Nav('CO2')">NavCO2</button>
+		<button (click)="NavClose('CO1','B1')">Close CO1</button>
+		<button (click)="NavClose('B1','CO1')">Close-B1</button>
+		<button (click)="removeTopic()">Remove Topic</button>
+		<button (click)="logEntity()">LogEntity</button><br/>
+		<input/>
+		<div>=============</div>
+		<router-outlet>
+			
+		</router-outlet>
+		</div>
+	</atlas-shell-entity>
 	

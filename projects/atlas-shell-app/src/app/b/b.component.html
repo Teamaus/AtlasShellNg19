@@ -1,15 +1,17 @@
 
+<div>
 <atlas-shell-entity entityType="B">
-<p>b works!</p>
-<form [formGroup]="frm">
-<button (click)="Nav('O3')">O3</button>
-Enter <input formControlName="ID"/>
+  <p>b works!</p>
+  <form [formGroup]="frm">
+  <button (click)="Nav('O3')">O3</button>
+  Enter <input formControlName="ID"/>
 
-</form>
-@if ($any(frm.get('ID'))?.dirty) {
-  <div>ID is dirty</div>
-}
+  </form>
+  @if ($any(frm.get('ID'))?.dirty) {
+    <div>ID is dirty</div>
+  }
 
-<input />
-<router-outlet name="info"></router-outlet>
+  <input />
+  <router-outlet name="info"></router-outlet>
 </atlas-shell-entity>
+</div>

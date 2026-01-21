@@ -82,6 +82,7 @@ private injector:Injector) {
     //console.log("C INIT",obs$)
     let selector2 = this.compService.shellEntitySelector(selectorA,"cData")
     this.store.select(selector2).subscribe(s=>console.log("S=>>>",s))
+    this.shellActionService.NavigateReuse("CO1",this.activeRout)
     /*this.store.select(selectorA)
     .subscribe(state=>console.log("STATE APP A",state))*/
     //AtlasShellSelect(this.compService,this.store.select(selector2))
@@ -103,31 +104,26 @@ private injector:Injector) {
     
   }
   NavClose(op:string,navop:string){
-    //this.compService.closeAndNavigate([op],{relativeTo:this.activeRout})
-    
-    //this.shellActionService.NavigateReuse(op,this.activeRout,true)
-    this.compService.closeRoute(op)
-    //this.shellActionService.NavigationClose(op,this.activeRout)
-    
-    //this.shellActionService.NavigateReuse(navop,this.activeRout)
-
+    this.shellActionService.NavigationClose(op,this.activeRout)
+   
 
   }
 
   Nav(op:string){
-    alert ("In here ...")
+    
     console.log("ATLAS_SHELL_ENTITY",this.atlas_shell_entity)
    /* if (this.atlas_shell_entity)
     {
       
       this.atlas_shell_entity.navigate(op,this.activeRout,false)
     }*/
-   this.compService.navigateSave([op],this.activeRout)
+   //this.compService.navigateSave([op],this.activeRout)
    
    // this.compService.navigateSave([op],{relativeTo:this.activeRout})
-   console.log("SASID:",op,this.activeRout,"===>>",this.shellActionService.currentAction,this.shellActionService.sasid)
-
-   //this.shellActionService.NavigateReuse(op,this.activeRout)
+   //console.log("SASID:",op,this.activeRout,"===>>",this.shellActionService.currentAction,this.shellActionService.sasid)
+   // this.atlas_shell_entity?.navigate(op,this.activeRout)
+   console.log("AAA:",this.activeRout.snapshot)
+    this.shellActionService.NavigateReuse(op,this.activeRout)
     
   }
   VALUE(op:string){

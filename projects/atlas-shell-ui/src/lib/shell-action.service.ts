@@ -1,4 +1,4 @@
-import { Inject, Injectable, Optional, Type } from '@angular/core';
+import { Inject, Injectable, Optional, signal, Type } from '@angular/core';
 import { Actions } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { AtlasShellRegistryService, actionToPlainActionType, actionTypeToEntityActionType, createCompositeAction, isAtlasEntityAction } from 'atlas-shell-logic';
@@ -11,6 +11,8 @@ import { AtlasShellErrorService } from './atlas-shell-error.service';
 import { ActivatedRoute, RouteReuseStrategy } from '@angular/router';
 import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
 import { WfRegistryService } from './wf-registry.service';
+import { AtlasNavV19Service } from './atlas-nav-v19.service';
+
 
 
 
@@ -27,6 +29,7 @@ export class ShellActionService implements Events {
   constructor(private _actions$:Actions,private shellEventsService:AtlasShellEventsService,private errService:AtlasShellErrorService
     ,private registryService:AtlasShellRegistryService
     ,private wfRegistry:WfRegistryService
+    ,private navService:AtlasNavV19Service
   ,@Optional()@Inject(RouteReuseStrategy) private routeReuseStrategy:AtlasShellReuseStrategy) {
      this.sasid = ++ShellActionService.count
     console.log("SASID:",this.sasid)
@@ -37,27 +40,30 @@ export class ShellActionService implements Events {
   }
   NavigationClose(value:any,relativeTo?:ActivatedRoute)
   {
-    console.log("RELATIVE TO:",relativeTo)
+    
+    if (relativeTo)  
+      this.navService.Close_(value,"",relativeTo)
+    else
+      this.navService.Close(value,"")
+    /*console.log("RELATIVE TO:",relativeTo)
     
     const __value = {value:[value],reuse:false,close:true}
     console.log("CLOSE NAVIGATE_",value,__value)
-    this.raiseEvent({event:"NAVIGATE",value:__value,"eventSubject":"SET"})
+    this.raiseEvent({event:"NAVIGATE",value:__value,"eventSubject":"SET"})*/
   }
-  
+  navSignal = signal<{op:string,activeRoute?:ActivatedRoute}|null>(null)
   Navigate_(value:any,reuse:boolean, relativeTo?:ActivatedRoute){
-    const __value = {value,reuse:reuse,close:false}
-
-    console.log("NAVIGATE_",value,__value)
-    if (this.routeReuseStrategy)
-      this.routeReuseStrategy.currentShellActionActivatedRoute = relativeTo
-    this.raiseEvent({event:"NAVIGATE",value:__value,"eventSubject":"SET"})
+    console.warn("OP:>>>",value,"REL TO:",relativeTo)
+    this.navSignal.set({op:value,activeRoute:relativeTo})
     
   }
   Navigate(value:any,relativeTo?:ActivatedRoute){
     this.Navigate_([value],false,relativeTo)
   }
   NavigateReuse(value:any,relativeTo?:ActivatedRoute){
-    this.Navigate_([value],true,relativeTo)
+    console.warn("OP:>>>",value,"REL TO:",relativeTo)
+    this.Navigate_(value,true,relativeTo)
+    //this.navService.Nav_(value,"", relativeTo)
   }
   back(){
     this.raiseEvent({event:"NAVIGATE",value:"","eventSubject":"BACK"})

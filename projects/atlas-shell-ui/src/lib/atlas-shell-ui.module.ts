@@ -23,6 +23,7 @@ import { WfElementComponent } from './wf-element/wf-element.component';
 import { Show2Directive } from './show2.directive';
 import { RouterOutletAdapterComponent } from './router-outlet-adapter/router-outlet-adapter.component';
 import { AtlasShellEntityDirective } from './atlas-shell-entity.directive';
+import { AtlasShellRootDirective } from './atlas-shell-root.directive';
 
 
 function rootReducers<T extends string>(slices:Array<T>){
@@ -51,6 +52,7 @@ function rootReducers<T extends string>(slices:Array<T>){
     WfElementComponent,
     Show2Directive,
     RouterOutletAdapterComponent,
+    
     
     
 

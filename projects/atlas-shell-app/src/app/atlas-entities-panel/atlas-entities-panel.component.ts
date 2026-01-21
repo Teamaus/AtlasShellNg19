@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { ATLAS_SHELL_ENTITY, AtlasNavV19Service, AtlasShellEntityService, AtlasShellNavigationV19Service, IAtlasShellEntity } from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasNavV19Service, AtlasShellEntityDirective, AtlasShellEntityService, AtlasShellNavigationV19Service, IAtlasShellEntity } from 'atlas-shell-ui';
 
 
 import { Observable } from 'rxjs';
@@ -26,10 +26,11 @@ export class AtlasEntitiesPanelComponent implements OnInit {
     private activatedRoute:ActivatedRoute,
     private shellNavigationService:AtlasShellNavigationV19Service,
     private navService:AtlasNavV19Service,
-    @Inject(ATLAS_SHELL_ENTITY) private atlas_shell_entity:AtlasShellRootDirective
+    @Inject(ATLAS_SHELL_ENTITY) private atlas_shell_entity:AtlasShellEntityDirective
     
   ) { 
-        console.log("ATLAS SHELL ROOT ENTITY:",this.atlas_shell_entity)
+        console.log("ATLAS SHELL ENTITY>>:",this.atlas_shell_entity)
+      
         
   }
 
@@ -40,10 +41,13 @@ export class AtlasEntitiesPanelComponent implements OnInit {
     else{
       if (this.entitiesCategory=="root"){
         this.componentService.initSelectors()
+        
       }
     }
+
     this.ids$ = this.componentService.entitiesIDS
     this.entities$=this.componentService.childEntities$
+    console.log("COMP ENTITIES:>>>"+JSON.stringify(this.componentService.entity))
   }
   createOrActivate(type:string){
       console.log("Entity Type:",this.entityType,this.entityID)

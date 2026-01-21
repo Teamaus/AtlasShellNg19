@@ -8,6 +8,8 @@ import { ActivatedRoute, NavigationEnd, Route, Router, RouteReuseStrategy } from
 import { AtlasShellNavigationV19Service } from './atlas-shell-navigation-v19.service';
 import { AtlasStoreService } from './atlas-store.service';
 import { AtlasNavV19Service } from './atlas-nav-v19.service';
+import { ShellActionService } from './shell-action.service';
+
 
 
 
@@ -19,18 +21,21 @@ export interface IAtlasShellEntity
     get childEntities():any[] 
     addChildEntity(entity:any):void 
     searchChildEntity(type:string):any
+    get entityID():string
+    getPath():string[] 
 }
 @Directive({
   selector: 'atlas-shell-entity',
   providers:[{provide:ATLAS_SHELL_ENTITY,useExisting:forwardRef(()=>AtlasShellEntityDirective)}
     //,{provide:ATLAS_SHELL_ENTITY_ID,deps:[forwardRef(()=>AtlasShellEntityDirective)],useFactory:(dir:AtlasShellEntityDirective)=>dir.entity.id}
     ,AtlasStoreService 
-    
+    ,AtlasChildEntitiesV19Service
   , AtlasNavV19Service],
   standalone: false,
   exportAs:'parentEntity'
 })
 export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
+  tester = "This is a test"
   entityType = input<string>("")
   entityCategoty=input<string>("childRoot")
   counter = 0
@@ -46,7 +51,8 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
               private childrenEntitiesService:AtlasChildEntitiesV19Service,
               private reuseStrategy:RouteReuseStrategy,
               private atlasStore:AtlasStoreService,
-               @SkipSelf() @Optional() @Inject(ATLAS_SHELL_ENTITY) private parentEntity:AtlasShellEntityDirective,
+              private shellActionService:ShellActionService,
+               @SkipSelf() @Optional() @Inject(ATLAS_SHELL_ENTITY) private parentEntity:IAtlasShellEntity,
               @Optional() private shellEntityService:AtlasShellEntityV19Service ) { 
     
     effect(()=>{
@@ -54,11 +60,20 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
                   this.shellEntityService.entity = this.entity
                   console.log("SHELL_ENTITY_SERVICE",this.shellEntityService)
                 })
+      effect(()=>{
+
+        const nav = this.shellActionService.navSignal()
+        if (!nav) return 
+          this.navigate(nav.op,nav.activeRoute)
+      })
       console.log("DIRECTIVE CONSTRUCTOR PARENT:",this.parentEntity)
      
    
       
     
+  }
+  get entityID():string{
+    return this.entity.id
   }
   dispatch(action:Action){
     
@@ -74,7 +89,10 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
      
   addChildEntity(entity:any)
   {
+      
       this.childrenEntitiesService.addEntity(entity)
+      
+
   }
   ngOnInit(): void {
       this.shellFactory.getInstanceID()
@@ -97,11 +115,22 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
         else
         {
           //Here we are going to create 
-          const path = this.getPath()
+
+          const path = this.parentEntity.getPath()
+          
           this.entity = this.atlasStore.createEntity(path,type,this.entityCategoty())
-          console.log("ENTITY CREATED:",this.entity)
-          this.shellEntityService.entity = this.entity 
+          
+          console.log("ENTITY CREATED:",this.entity," PATH:>>",path)
+          if (this.shellEntityService)
+          {
+           
+            this.shellEntityService.entity = this.entity 
+          }
+          console.log("Parent Entity 99991:",this.parentEntity)
+          //alert("Parent Entity:"+JSON.stringify(this.parentEntity))
+          
           this.parentEntity.addChildEntity(this.entity)
+          
           console.log("V19 CREATE: ", path)
         }
         
@@ -114,13 +143,19 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
   getPath():string[]{
     let ret:string[] = []
     if (this.parentEntity){
-      ret = [...ret,...this.parentEntity.getPath()]
+      console.log("PARENT ENTITY:",this.parentEntity)
+      ret = [...this.parentEntity.getPath(),this.entityID]
 
     }
     return ret
   }
-  navigate(op:any,activatedRoute:ActivatedRoute,save=true){
-     this.navigation.Nav(op,"")
+  navigate(op:any,activatedRoute?:ActivatedRoute,save=true){
+    alert(`Here:${op},${activatedRoute}`)
+
+    if (activatedRoute)
+     this.navigation.Nav_(op,"",activatedRoute)
+    else
+      this.navigation.Nav(op,"")
   }
 
 }
