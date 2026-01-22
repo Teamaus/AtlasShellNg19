@@ -11,7 +11,7 @@ import { IAtlasReuseStrategyV19, REUSE_STRATEGY } from './contracts/IAtlasReuseS
 @Injectable()
 export class AtlasNavV19Service {
   
-  constructor(private router:Router,private activatedoute:ActivatedRoute,
+  constructor(private router:Router,private activatedRoute:ActivatedRoute,
     private navUtil:NavUtilsV19Service,private pathStateServie:PathStateV19Service,
   @Optional() @Inject(REUSE_STRATEGY)private myReuseStrategy:IAtlasReuseStrategyV19) { }
   setSaveRoute(save:boolean){
@@ -21,9 +21,12 @@ export class AtlasNavV19Service {
 
     ).subscribe(event=>
     {
-      console.log("The key will be ",event.url,event.type)
-      this.pathStateServie.setPathState(this.activatedoute.snapshot,event.url)
-      if (save)this.myReuseStrategy.SaveNav(event.url)
+      const activeSnapshot = this.navUtil.getCurrentActivatedRouteSnapshot(this.router.routerState.root.snapshot,this.activatedRoute.outlet)
+      console.log("The key will be ",event.url,event.type,this.navUtil.getURLfromSnapshotWithOutlet(activeSnapshot))
+      
+      this.pathStateServie.setPathState(this.activatedRoute.snapshot,event.url)
+      
+      if (save)this.myReuseStrategy.SaveSnapshot(activeSnapshot)
       console.log("PATH STATE:",this.pathStateServie.pathState)
     
     })
@@ -42,7 +45,7 @@ export class AtlasNavV19Service {
   Close(op:string,outlet:string)
   {
     
-    this.Close_(op,outlet,this.activatedoute) 
+    this.Close_(op,outlet,this.activatedRoute) 
   }
   Nav_(op:string,outlet:string,activeRoute:ActivatedRoute,save = true)
   {
@@ -50,7 +53,7 @@ export class AtlasNavV19Service {
     
     const value = outlet==""?[op]:[{outlets:{[outlet]:op}}]
     
-    const navUrl = this.pathStateServie.getPathState(this.activatedoute.snapshot,this.navUtil.navValue(value))
+    const navUrl = this.pathStateServie.getPathState(this.activatedRoute.snapshot,this.navUtil.navValue(value))
     if (!navUrl)
     {
     
@@ -64,7 +67,7 @@ export class AtlasNavV19Service {
   }
   Nav(op:string,outlet:string,save = true)
   {
-    this.Nav_(op,outlet,this.activatedoute,save)
+    this.Nav_(op,outlet,this.activatedRoute,save)
     /*this.setSaveRoute(save)
     
     const value = outlet==""?[op]:[{outlets:{[outlet]:op}}]

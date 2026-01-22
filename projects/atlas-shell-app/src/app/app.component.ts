@@ -8,9 +8,9 @@ import { filter, map, take } from 'rxjs/operators';
 
 import { Observable } from 'rxjs';
 import { RootComponentService } from './root-component.service';
-import { ATLAS_SHELL_ENTITY, AtlasShellEntityService } from 'atlas-shell-ui';
+import { ATLAS_SHELL_ENTITY, AtlasShellEntityService, AtlasShellRootDirective } from 'atlas-shell-ui';
 import { LazyLoadInitService } from './lazy-load-init.service';
-import { AtlasShellRootDirective } from './atlas-shell-root.directive';
+
 
 
 

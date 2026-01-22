@@ -21,10 +21,17 @@ export class AtlasReuseStrategyV19Service extends RouteReuseStrategy implements 
   constructor(@Inject(ATLAS_ENTITIES_USE_REUSESTRATEGY)private useEntities:string[],private navUtil:NavUtilsV19Service){
     super()
   }
+  SaveSnapshot(snapshot: ActivatedRouteSnapshot): void {
+      this.SaveNav(this.navUtil.getURLfromSnapshotWithOutlet(snapshot))
+  }
+  CloseSnapshot(snapshot: ActivatedRouteSnapshot): void {
+    this.CloseNav(this.navUtil.getURLfromSnapshotWithOutlet(snapshot))
+  }
   CloseNav(url: string): void {
     this.saved[url] = false
   }
   SaveNav(url: string): void {
+    
     this.saved[url] = true
   }
   override shouldDetach(route: ActivatedRouteSnapshot): boolean {
@@ -44,7 +51,7 @@ export class AtlasReuseStrategyV19Service extends RouteReuseStrategy implements 
   override shouldAttach(route: ActivatedRouteSnapshot): boolean {
       const url = this.navUtil.getURLfromSnapshotWithOutlet(route)
       const pUrl = this.navUtil.getURLfromSnapshotWithOutlet(route.root)
-      console.log("MyReuseStrategyService Should Attach:",url,pUrl,this.saved)
+      console.log("MyReuseStrategyService Should Attach:",url,pUrl,this.saved,this.routeStorage)
       const retval = (this.routeStorage[url]!=undefined) && this.saved[url]
       return retval
   }

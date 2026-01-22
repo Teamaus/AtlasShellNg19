@@ -2,6 +2,8 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouteReuseStrategy } from '@angular/router';
 import { AtlasShellReuseStrategy } from './atlas-reuse-strategy';
 import { filter, take } from 'rxjs';
+import { IAtlasReuseStrategyV19 } from '../public-api';
+
 
 
 @Injectable({
@@ -9,8 +11,8 @@ import { filter, take } from 'rxjs';
 })
 export class AtlasShellNavigationV19Service {
 
-  constructor(private router:Router,@Optional() @Inject(RouteReuseStrategy) private routeReuseStrategy:AtlasShellReuseStrategy) { 
-     this.router.events.pipe(filter(event=>event instanceof NavigationEnd))
+  constructor(private router:Router,@Optional() @Inject(RouteReuseStrategy) private routeReuseStrategy:IAtlasReuseStrategyV19) { 
+     /*this.router.events.pipe(filter(event=>event instanceof NavigationEnd))
       .subscribe(
         event=>{
           this.routeReuseStrategy.navMode = "URL"  
@@ -22,16 +24,16 @@ export class AtlasShellNavigationV19Service {
           //console.log("NAVIGATION END EVENT:",event)
           console.log("AtlasShellNavigationV19Service 2",(this.routeReuseStrategy as any).pathState)
         }
-      )
+      )*/
      
   }
   NavEntity(entityID:string,entityType:string,activatedRoute:ActivatedRoute){
       
-      if (this.routeReuseStrategy)
+     /* if (this.routeReuseStrategy)
       {
           console.log("Nav Entity =>>>")
           this.routeReuseStrategy.setEntityType(entityType)
-      }
+      }*/
       console.log("Nav Entity =>>>",entityID,entityType)
 
       this.navigate([{outlets:{["root_"+entityID]:[entityType]}}],true,entityType,{relativeTo:activatedRoute})
@@ -49,7 +51,7 @@ export class AtlasShellNavigationV19Service {
     this.router.events.pipe(filter(event=>event instanceof NavigationEnd),take(1))
       .subscribe(
         event=>{
-          this.routeReuseStrategy.navMode = "URL"  
+         // this.routeReuseStrategy.navMode = "URL"  
           //this.routeReuseStrategy.saveRoute(event.url,save) 
           
         }
@@ -69,15 +71,15 @@ export class AtlasShellNavigationV19Service {
       
       console.log("SETSAVEDVALUE PATHSTATE:",value,pathState)
       
-      this.routeReuseStrategy.setSavedValue(this.targetUrl(this.router,extras["relativeTo"],value),save)    
+      //this.routeReuseStrategy.setSavedValue(this.targetUrl(this.router,extras["relativeTo"],value),save)    
 
-      this.routeReuseStrategy.saveRoute(this.router.url+"/"+value,extras["relativeTo"].snapshot)
-      routedValue = pathState.get(this.routeReuseStrategy.getKey(value))?pathState.get(this.routeReuseStrategy.getKey(value)):value
-      if (this.routeReuseStrategy.navMode=="URL")
+      //this.routeReuseStrategy.saveRoute(this.router.url+"/"+value,extras["relativeTo"].snapshot)
+      //routedValue = pathState.get(this.routeReuseStrategy.getKey(value))?pathState.get(this.routeReuseStrategy.getKey(value)):value
+      /*if (this.routeReuseStrategy.navMode=="URL")
       {
         console.log("HERE?")
         this.routeReuseStrategy.entityType = entityType
-      }
+      }*/
 
       
 

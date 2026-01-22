@@ -150,7 +150,7 @@ export class AtlasShellEntityDirective implements OnInit,IAtlasShellEntity{
     return ret
   }
   navigate(op:any,activatedRoute?:ActivatedRoute,save=true){
-    alert(`Here:${op},${activatedRoute}`)
+    
 
     if (activatedRoute)
      this.navigation.Nav_(op,"",activatedRoute)

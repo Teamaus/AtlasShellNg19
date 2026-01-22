@@ -30,7 +30,7 @@ import { Show2Directive } from './wf_op/show2.directive';
 import { Show3Directive } from './wf_op/show3.directive';
 import { MyTestDirective } from './my-test.directive';
 import { DirTestComponent } from './dir-test/dir-test.component';
-//import { AtlasShellRootDirective } from './atlas-shell-root.directive';
+
 
 
 type slices = "shell" | "doc"
@@ -51,7 +51,7 @@ type slices = "shell" | "doc"
     O0Component,
     MyTestDirective,
     DirTestComponent,
-    //AtlasShellRootDirective,
+    
     
   ],
   providers: [{provide:RouteReuseStrategy,useClass:AtlasReuseStrategyV19Service}

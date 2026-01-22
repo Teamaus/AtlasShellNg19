@@ -55,7 +55,20 @@ export class NavUtilsV19Service {
   return `/(${outlet}:${newPath})`;
 }
 
-  
+  getCurrentActivatedRouteSnapshot(
+  root: ActivatedRouteSnapshot,outlet:string
+  ): ActivatedRouteSnapshot {
+  let r = root;
+
+  while (true) {
+    const next =
+      r.children.find(c => c.outlet === outlet) ??
+      r.firstChild;
+
+    if (!next) return r;
+    r = next;
+  }
+}
   getURLfromSnapshotWithOutlet(route: ActivatedRouteSnapshot): string {
   		const chain = route.pathFromRoot;
 

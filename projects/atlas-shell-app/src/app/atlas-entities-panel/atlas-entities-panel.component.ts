@@ -3,7 +3,7 @@ import { ATLAS_SHELL_ENTITY, AtlasNavV19Service, AtlasShellEntityDirective, Atla
 
 
 import { Observable } from 'rxjs';
-import { AtlasShellRootDirective } from '../atlas-shell-root.directive';
+
 import { ActivatedRoute, Router } from '@angular/router';
 
 
